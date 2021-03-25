@@ -1,0 +1,5 @@
+## Algafood API com CDD
+
+Projeto desenvolvido no curso Especialista Spring REST da Algaworks aplicando técnicas de CDD (Cognitive-Driven Development) que é uma abordagem de desenvolvimento baseada em teorias da psicologia, arquiteturas de software famosas, e experiência de mercado. Essa abordagem tem como principal objetivo deixar o código o mais fácil de ser entendido possível, padrozinado e limpo. O CDD está sendo elaborado, experimentado e divulgado por Alberto Souza principalmente através da iniciativa Dev Eficiente.
+
+O curso Especialista Spring REST da Algaworks aborda o desenvolvimento de APIs REST com o ecossitema Java+Spring de uma forma muito aprofundada e excelente. Não só explora ao máximo e detalha as ferramentas forncecidas pelo Spring como támbem fornece uma excelente visão de modelagem de APIs com uma análise muito completa e alinhada com ótimas práticas de desenvolvimento e utilização no mercado.
