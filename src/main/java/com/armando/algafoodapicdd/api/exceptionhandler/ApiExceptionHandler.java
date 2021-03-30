@@ -1,6 +1,8 @@
 package com.armando.algafoodapicdd.api.exceptionhandler;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.IgnoredPropertyException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -12,7 +14,9 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.OffsetDateTime;
@@ -27,14 +31,45 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Autowired
     private MessageSource messageSource;
 
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<?> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        CustomExceptionBody body = new CustomExceptionBody(
+                status.value(),
+                status.getReasonPhrase(),
+                String.format(
+                        "A propriedade '%s' recebeu um valor %s que é inválido para o tipo %s.",
+                        ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName()),
+                OffsetDateTime.now()
+        );
+        return super.handleExceptionInternal(
+                ex,
+                body,
+                new HttpHeaders(),
+                status,
+                request
+        );
+    }
+
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        if (ex.getCause() instanceof PropertyBindingException) {
+        if (ex.getCause() instanceof PropertyBindingException || ex.getCause() instanceof IgnoredPropertyException) {
             String path = joinPath(((PropertyBindingException) ex.getCause()).getPath());
             CustomExceptionBody body = new CustomExceptionBody(
                     status.value(),
                     status.getReasonPhrase(),
                     String.format("A propriedade '%s' informada não é reconhecida no sistema.", path),
+                    OffsetDateTime.now()
+            );
+            return super.handleExceptionInternal(ex, body, headers, status, request);
+        } else if (ex.getCause() instanceof InvalidFormatException) {
+            String path = joinPath(((InvalidFormatException) ex.getCause()).getPath());
+            CustomExceptionBody body = new CustomExceptionBody(
+                    status.value(),
+                    status.getReasonPhrase(),
+                    String.format(
+                            "A propriedade '%s' recebeu um valor %s que é inválido para o tipo %s.",
+                            path, ((InvalidFormatException) ex.getCause()).getValue(), ((InvalidFormatException) ex.getCause()).getTargetType().getSimpleName()),
                     OffsetDateTime.now()
             );
             return super.handleExceptionInternal(ex, body, headers, status, request);

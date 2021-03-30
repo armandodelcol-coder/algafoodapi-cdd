@@ -13,6 +13,10 @@ public class Kitchen {
     @Column(nullable = false, length = 60)
     private String name;
 
+    @Deprecated
+    public Kitchen() {
+    }
+
     public Kitchen(String name) {
         this.name = name;
     }
@@ -25,4 +29,7 @@ public class Kitchen {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 }
