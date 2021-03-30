@@ -1,6 +1,7 @@
 package com.armando.algafoodapicdd.api.controllers;
 
 import com.armando.algafoodapicdd.api.model.request.KitchenRequest;
+import com.armando.algafoodapicdd.api.model.response.KitchenResponse;
 import com.armando.algafoodapicdd.domain.model.Kitchen;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +21,10 @@ public class KitchensController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
-    public String insert(@RequestBody @Valid KitchenRequest kitchenRequest) {
+    public KitchenResponse insert(@RequestBody @Valid KitchenRequest kitchenRequest) {
         Kitchen kitchen = new Kitchen(kitchenRequest.getName());
         manager.persist(kitchen);
-        return kitchen.toString();
+        return new KitchenResponse(kitchen);
     }
 
 }
