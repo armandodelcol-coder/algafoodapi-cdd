@@ -1,0 +1,48 @@
+package com.armando.algafoodapicdd.api.model.request;
+
+import com.armando.algafoodapicdd.api.validator.ExistsId;
+import com.armando.algafoodapicdd.api.validator.UniqueValue;
+import com.armando.algafoodapicdd.domain.model.Kitchen;
+import com.armando.algafoodapicdd.domain.model.Restaurant;
+import org.springframework.util.Assert;
+
+import javax.persistence.EntityManager;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
+import java.math.BigDecimal;
+
+public class RestaurantRequest {
+
+    @NotBlank
+    @UniqueValue(domainClass = Restaurant.class, fieldName = "name")
+    private String name;
+
+    @NotNull
+    @PositiveOrZero
+    private BigDecimal deliveryTax;
+
+    @NotNull
+    @ExistsId(domainClass = Kitchen.class, fieldName = "kitchenId")
+    private Long kitchenId;
+
+    public String getName() {
+        return name;
+    }
+
+    public BigDecimal getDeliveryTax() {
+        return deliveryTax;
+    }
+
+    public Long getKitchenId() {
+        return kitchenId;
+    }
+
+    public Restaurant toModel(EntityManager manager) {
+        Kitchen kitchen = manager.find(Kitchen.class, this.kitchenId);
+        Assert.state(kitchen != null, "Não é possível criar um Restaurante com uma Cozinha inexistente");
+
+        return new Restaurant(this.name, this.deliveryTax, kitchen);
+    }
+
+}

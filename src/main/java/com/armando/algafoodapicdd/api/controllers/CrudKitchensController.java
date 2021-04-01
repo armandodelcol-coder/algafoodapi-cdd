@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/kitchens")
-public class KitchensController {
+public class CrudKitchensController {
 
     @PersistenceContext
     private EntityManager manager;
