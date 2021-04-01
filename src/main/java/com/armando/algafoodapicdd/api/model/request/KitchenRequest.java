@@ -11,14 +11,6 @@ public class KitchenRequest {
     @NotBlank
     private String name;
 
-    @Deprecated
-    public KitchenRequest() {
-    }
-
-    public KitchenRequest(@NotBlank String name) {
-        this.name = name;
-    }
-
     public String getName() {
         return name;
     }
