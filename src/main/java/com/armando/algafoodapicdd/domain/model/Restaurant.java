@@ -37,6 +37,10 @@ public class Restaurant {
     @Column(nullable = false, columnDefinition = "datetime")
     private OffsetDateTime updatedAt;
 
+    @Deprecated
+    public Restaurant() {
+    }
+
     public Restaurant(String name, BigDecimal deliveryTax, Kitchen kitchen) {
         this.name = name;
         this.deliveryTax = deliveryTax;
