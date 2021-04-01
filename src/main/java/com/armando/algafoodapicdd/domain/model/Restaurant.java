@@ -37,27 +37,53 @@ public class Restaurant {
     @Column(nullable = false, columnDefinition = "datetime")
     private OffsetDateTime updatedAt;
 
+    @Embedded
+    private Address address;
+
     @Deprecated
     public Restaurant() {
     }
 
-    public Restaurant(String name, BigDecimal deliveryTax, Kitchen kitchen) {
+    public Restaurant(String name, BigDecimal deliveryTax, Kitchen kitchen, Address address) {
         this.name = name;
         this.deliveryTax = deliveryTax;
         this.kitchen = kitchen;
+        this.address = address;
     }
 
-    @Override
-    public String toString() {
-        return "Restaurant{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", deliveryTax=" + deliveryTax +
-                ", kitchen=" + kitchen +
-                ", active=" + active +
-                ", isOpen=" + open +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public BigDecimal getDeliveryTax() {
+        return deliveryTax;
+    }
+
+    public Kitchen getKitchen() {
+        return kitchen;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public Boolean getOpen() {
+        return open;
+    }
+
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public Address getAddress() {
+        return address;
     }
 }

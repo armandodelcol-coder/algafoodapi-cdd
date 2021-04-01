@@ -2,11 +2,13 @@ package com.armando.algafoodapicdd.api.model.request;
 
 import com.armando.algafoodapicdd.api.validator.ExistsId;
 import com.armando.algafoodapicdd.api.validator.UniqueValue;
+import com.armando.algafoodapicdd.domain.model.Address;
 import com.armando.algafoodapicdd.domain.model.Kitchen;
 import com.armando.algafoodapicdd.domain.model.Restaurant;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
@@ -26,12 +28,20 @@ public class RestaurantRequest {
     @ExistsId(domainClass = Kitchen.class, fieldName = "kitchenId")
     private Long kitchenId;
 
+    @NotNull
+    @Valid
+    private AddressRequest address;
+
     public String getName() {
         return name;
     }
 
     public BigDecimal getDeliveryTax() {
         return deliveryTax;
+    }
+
+    public AddressRequest getAddress() {
+        return address;
     }
 
     public Long getKitchenId() {
@@ -42,7 +52,14 @@ public class RestaurantRequest {
         Kitchen kitchen = manager.find(Kitchen.class, this.kitchenId);
         Assert.state(kitchen != null, "Não é possível criar um Restaurante com uma Cozinha inexistente");
 
-        return new Restaurant(this.name, this.deliveryTax, kitchen);
+        Address address = new Address(
+                this.address.getZipcode(),
+                this.address.getPlace(),
+                this.address.getNumber(),
+                this.address.getComplement(),
+                this.address.getNeighborhood()
+        );
+        return new Restaurant(this.name, this.deliveryTax, kitchen, address);
     }
 
 }

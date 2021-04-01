@@ -1,6 +1,7 @@
 package com.armando.algafoodapicdd.api.controllers;
 
 import com.armando.algafoodapicdd.api.model.request.RestaurantRequest;
+import com.armando.algafoodapicdd.api.model.response.RestaurantResponse;
 import com.armando.algafoodapicdd.domain.model.Restaurant;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +21,10 @@ public class CrudRestaurantsController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
-    public String insert(@RequestBody @Valid RestaurantRequest restaurantRequest) {
+    public RestaurantResponse insert(@RequestBody @Valid RestaurantRequest restaurantRequest) {
         Restaurant restaurant = restaurantRequest.toModel(manager);
         manager.persist(restaurant);
-        return restaurant.toString();
+        return new RestaurantResponse(restaurant);
     }
 
 }
