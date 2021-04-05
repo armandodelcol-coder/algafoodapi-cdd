@@ -1,6 +1,6 @@
 package com.armando.algafoodapicdd.api.controllers;
 
-import com.armando.algafoodapicdd.api.exceptionhandler.CustomExceptionBody;
+import com.armando.algafoodapicdd.api.exceptionhandler.CustomErrorResponseBody;
 import com.armando.algafoodapicdd.api.model.request.KitchenRequest;
 import com.armando.algafoodapicdd.api.model.response.KitchenResponse;
 import com.armando.algafoodapicdd.domain.model.Kitchen;
@@ -71,7 +71,7 @@ public class CrudKitchensController {
         checkKitchenExistence(kitchen);
         if (kitchen.hasAnyRestaurant()) {
             return ResponseEntity.badRequest().body(
-                    new CustomExceptionBody(
+                    new CustomErrorResponseBody(
                             HttpStatus.BAD_REQUEST.value(),
                             HttpStatus.BAD_GATEWAY.getReasonPhrase(),
                             "Existem Restaurantes relacionados a essa Cozinha.",

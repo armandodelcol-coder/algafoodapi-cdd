@@ -35,7 +35,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
-        CustomExceptionBody body = new CustomExceptionBody(
+        CustomErrorResponseBody body = new CustomErrorResponseBody(
                 status.value(),
                 status.getReasonPhrase(),
                 ex.getMessage(),
@@ -53,7 +53,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<?> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, WebRequest request) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
-        CustomExceptionBody body = new CustomExceptionBody(
+        CustomErrorResponseBody body = new CustomErrorResponseBody(
                 status.value(),
                 status.getReasonPhrase(),
                 String.format(
@@ -74,7 +74,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         if (ex.getCause() instanceof PropertyBindingException || ex.getCause() instanceof IgnoredPropertyException) {
             String path = joinPath(((PropertyBindingException) ex.getCause()).getPath());
-            CustomExceptionBody body = new CustomExceptionBody(
+            CustomErrorResponseBody body = new CustomErrorResponseBody(
                     status.value(),
                     status.getReasonPhrase(),
                     String.format("A propriedade '%s' informada não é reconhecida no sistema.", path),
@@ -83,7 +83,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             return super.handleExceptionInternal(ex, body, headers, status, request);
         } else if (ex.getCause() instanceof InvalidFormatException) {
             String path = joinPath(((InvalidFormatException) ex.getCause()).getPath());
-            CustomExceptionBody body = new CustomExceptionBody(
+            CustomErrorResponseBody body = new CustomErrorResponseBody(
                     status.value(),
                     status.getReasonPhrase(),
                     String.format(
@@ -99,7 +99,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        CustomExceptionBody body = new CustomExceptionBody(
+        CustomErrorResponseBody body = new CustomErrorResponseBody(
                 status.value(),
                 status.getReasonPhrase(),
                 "Um ou mais campos de entrada estão inválidos, verifique o preenchimento e tente novamente.",
@@ -107,11 +107,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         );
 
         BindingResult bindingResult = ex.getBindingResult();
-        List<CustomExceptionBody.Detail> invalidFields = bindingResult.getFieldErrors().stream()
+        List<CustomErrorResponseBody.Detail> invalidFields = bindingResult.getFieldErrors().stream()
                 .map(fieldError -> {
                     // Message Source serve para viabilizar que a mensagem dos campos possam ser tratadas no arquivo messages.properties
                     String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
-                    return new CustomExceptionBody.Detail(fieldError.getField(), message);
+                    return new CustomErrorResponseBody.Detail(fieldError.getField(), message);
                 }).collect(Collectors.toList());
         body.setDetails(invalidFields);
 
@@ -121,7 +121,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
         if (body == null) {
-            body = new CustomExceptionBody(
+            body = new CustomErrorResponseBody(
                     status.value(),
                     status.getReasonPhrase(),
                     MSG_ERROR_GENERIC,
