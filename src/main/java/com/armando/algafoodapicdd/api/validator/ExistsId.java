@@ -18,6 +18,4 @@ public @interface ExistsId {
 
     Class<?> domainClass();
 
-    String fieldName();
-
 }

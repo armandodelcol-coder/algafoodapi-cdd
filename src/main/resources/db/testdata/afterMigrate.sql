@@ -2,11 +2,15 @@ set foreign_key_checks = 0;
 
 delete from tb_kitchen;
 delete from tb_restaurant;
+delete from tb_state;
+delete from tb_city;
 
 set foreign_key_checks = 1;
 
 alter table tb_kitchen auto_increment = 1;
 alter table tb_restaurant auto_increment = 1;
+alter table tb_state auto_increment = 1;
+alter table tb_city auto_increment = 1;
 
 INSERT INTO tb_kitchen (name) VALUES ('Tailandesa');
 INSERT INTO tb_kitchen (name) VALUES ('Indiana');
@@ -23,3 +27,12 @@ INSERT INTO tb_restaurant (name, delivery_tax, created_at, updated_at, kitchen_i
 INSERT INTO tb_restaurant (name, delivery_tax, created_at, updated_at, kitchen_id, address_place, address_complement, address_neighborhood, address_number, address_zipcode) VALUES ("Burguer King", 9, utc_timestamp, utc_timestamp, 4, "Avenida 27", null, "Jardim São Miguel", "88", "12915000");
 INSERT INTO tb_restaurant (name, delivery_tax, created_at, updated_at, kitchen_id, address_place, address_complement, address_neighborhood, address_number, address_zipcode) VALUES ("China In Box", 7, utc_timestamp, utc_timestamp, 5, "Avenida 37", null, "Centro", "100", "12915000");
 INSERT INTO tb_restaurant (name, delivery_tax, created_at, updated_at, kitchen_id, address_place, address_complement, address_neighborhood, address_number, address_zipcode) VALUES ("Tex&Mex", 12, utc_timestamp, utc_timestamp, 6, "Avenida 77", null, "São Lourenço", "100-A", "12915000");
+
+INSERT INTO tb_state (name) VALUES ('São Paulo');
+INSERT INTO tb_state (name) VALUES ('Minas Gerais');
+INSERT INTO tb_state (name) VALUES ('Rio Grande do Sul');
+
+INSERT INTO tb_city (name, state_id) VALUES ('Bragança Paulista', 1);
+INSERT INTO tb_city (name, state_id) VALUES ('São Paulo', 1);
+INSERT INTO tb_city (name, state_id) VALUES ('Extrema', 2);
+INSERT INTO tb_city (name, state_id) VALUES ('Florianópolis', 3);

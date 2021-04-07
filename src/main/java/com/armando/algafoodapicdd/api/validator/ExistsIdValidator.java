@@ -7,7 +7,6 @@ import javax.validation.ConstraintValidatorContext;
 
 public class ExistsIdValidator implements ConstraintValidator<ExistsId, Object> {
 
-    private String domainAttribute;
     private Class<?> aClass;
 
     @PersistenceContext
@@ -15,7 +14,6 @@ public class ExistsIdValidator implements ConstraintValidator<ExistsId, Object> 
 
     @Override
     public void initialize(ExistsId constraintAnnotation) {
-        this.domainAttribute = constraintAnnotation.fieldName();
         this.aClass = constraintAnnotation.domainClass();
     }
 

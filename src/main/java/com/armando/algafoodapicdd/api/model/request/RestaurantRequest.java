@@ -25,7 +25,7 @@ public class RestaurantRequest {
     private BigDecimal deliveryTax;
 
     @NotNull
-    @ExistsId(domainClass = Kitchen.class, fieldName = "kitchenId")
+    @ExistsId(domainClass = Kitchen.class)
     private Long kitchenId;
 
     @NotNull
