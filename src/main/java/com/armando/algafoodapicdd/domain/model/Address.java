@@ -20,7 +20,7 @@ public class Address {
     @Column(name = "address_neighborhood")
     private String neighborhood;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_city_id", nullable = false)
     private City city;
 

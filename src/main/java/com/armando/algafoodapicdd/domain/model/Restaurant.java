@@ -21,7 +21,7 @@ public class Restaurant {
     @Column(nullable = false)
     private BigDecimal deliveryTax;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "kitchen_id", nullable = false)
     private Kitchen kitchen;
 
