@@ -17,6 +17,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// Carga intrínsica = 7; Limite = 7
 @RestController
 @RequestMapping(value = "/kitchens")
 public class CrudKitchensController {
@@ -27,7 +28,9 @@ public class CrudKitchensController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
+    // Carga: +1 (KitchenResponse) +1 (KitchenRequest)
     public KitchenResponse insert(@RequestBody @Valid KitchenRequest kitchenRequest) {
+        // Carga: +1 (Kitchen)
         Kitchen kitchen = new Kitchen(kitchenRequest.getName());
         manager.persist(kitchen);
         return new KitchenResponse(kitchen);
@@ -38,6 +41,7 @@ public class CrudKitchensController {
     public List<KitchenResponse> list() {
         return manager.createQuery("SELECT kitchen FROM Kitchen kitchen", Kitchen.class)
                 .getResultList().stream()
+                // Carga: +1 (função como argumento no map)
                 .map(kitchen -> new KitchenResponse(kitchen))
                 .collect(Collectors.toList());
     }
@@ -69,8 +73,10 @@ public class CrudKitchensController {
     public ResponseEntity<?> delete(@PathVariable Long kitchenId) {
         Kitchen kitchen = manager.find(Kitchen.class, kitchenId);
         checkKitchenExistence(kitchen);
+        // Carga: +1 (branch if)
         if (kitchen.hasAnyRestaurant()) {
             return ResponseEntity.badRequest().body(
+                    // Carga: +1 (CustomErrorResponseBody)
                     new CustomErrorResponseBody(
                             HttpStatus.BAD_REQUEST.value(),
                             HttpStatus.BAD_GATEWAY.getReasonPhrase(),
@@ -84,6 +90,7 @@ public class CrudKitchensController {
     }
 
     private void checkKitchenExistence(Kitchen kitchen) {
+        // Carga: +1 (branch if)
         if (kitchen == null) throw new EntityNotFoundException("Cozinha não encontrada.");
     }
 
