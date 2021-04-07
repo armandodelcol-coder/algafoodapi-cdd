@@ -16,11 +16,13 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// Carga intrínsica = 5; Limite = 7
 @RestController
 @RequestMapping("/cities")
 public class CrudCitiesController {
 
     @Autowired
+    // Carga: +1 (CityAlreadyExistsInStateValidator)
     private CityAlreadyExistsInStateValidator cityAlreadyExistsInStateValidator;
 
     @PersistenceContext
@@ -34,7 +36,9 @@ public class CrudCitiesController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
+    // Carga: +1 (CityResponse) +1 (CityRequest)
     public CityResponse insert(@RequestBody @Valid CityRequest cityRequest) {
+        // Carga: +1 (City)
         City city = cityRequest.toModel(manager);
         manager.persist(city);
         return new CityResponse(city);
@@ -44,6 +48,7 @@ public class CrudCitiesController {
     @ResponseStatus(HttpStatus.OK)
     public List<CityResponse> list() {
         return manager.createQuery("SELECT city from City city", City.class).getResultList()
+                // Carga: +1 (função como argumento no map)
                 .stream().map(city -> new CityResponse(city))
                 .collect(Collectors.toList());
     }

@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// Carga intrínsica = 5; Limite = 7
+// Carga intrínsica = 6; Limite = 7
 @RestController
 @RequestMapping("/restaurants")
 public class CrudRestaurantsController {
@@ -28,6 +28,7 @@ public class CrudRestaurantsController {
     @Transactional
     // Carga: +1 (RestaurantResponse) +1 (RestaurantRequest)
     public RestaurantResponse insert(@RequestBody @Valid RestaurantRequest restaurantRequest) {
+        // Carga: +1 (Restaurant)
         Restaurant restaurant = restaurantRequest.toModel(manager);
         manager.persist(restaurant);
         return new RestaurantResponse(restaurant);
