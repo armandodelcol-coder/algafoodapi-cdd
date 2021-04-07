@@ -9,6 +9,7 @@ public class AddressResponse {
     private String number;
     private String neighborhood;
     private String complement;
+    private CityResponse city;
 
     public AddressResponse(Address address) {
         this.zipcode = address.getZipcode();
@@ -16,6 +17,7 @@ public class AddressResponse {
         this.number = address.getNumber();
         this.neighborhood = address.getNeighborhood();
         this.complement = address.getComplement();
+        this.city = new CityResponse(address.getCity());
     }
 
     public String getZipcode() {
@@ -37,4 +39,9 @@ public class AddressResponse {
     public String getComplement() {
         return complement;
     }
+
+    public CityResponse getCity() {
+        return city;
+    }
+
 }

@@ -20,16 +20,21 @@ public class Address {
     @Column(name = "address_neighborhood")
     private String neighborhood;
 
+    @ManyToOne
+    @JoinColumn(name = "address_city_id", nullable = false)
+    private City city;
+
     @Deprecated
     public Address() {
     }
 
-    public Address(String zipcode, String place, String number, String complement, String neighborhood) {
+    public Address(String zipcode, String place, String number, String complement, String neighborhood, City city) {
         this.zipcode = zipcode;
         this.place = place;
         this.number = number;
         this.complement = complement;
         this.neighborhood = neighborhood;
+        this.city = city;
     }
 
     public String getZipcode() {
@@ -52,4 +57,7 @@ public class Address {
         return neighborhood;
     }
 
+    public City getCity() {
+        return city;
+    }
 }

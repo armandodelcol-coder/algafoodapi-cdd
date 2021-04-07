@@ -3,6 +3,7 @@ package com.armando.algafoodapicdd.api.model.request;
 import com.armando.algafoodapicdd.api.validator.ExistsId;
 import com.armando.algafoodapicdd.api.validator.UniqueValue;
 import com.armando.algafoodapicdd.domain.model.Address;
+import com.armando.algafoodapicdd.domain.model.City;
 import com.armando.algafoodapicdd.domain.model.Kitchen;
 import com.armando.algafoodapicdd.domain.model.Restaurant;
 import org.springframework.util.Assert;
@@ -52,12 +53,16 @@ public class RestaurantRequest {
         Kitchen kitchen = manager.find(Kitchen.class, this.kitchenId);
         Assert.state(kitchen != null, "Não é possível criar um Restaurante com uma Cozinha inexistente");
 
+        City city = manager.find(City.class, this.address.getCityId());
+        Assert.state(city != null, "Não é possível criar um Endereço com uma Cidade inexistente");
+
         Address address = new Address(
                 this.address.getZipcode(),
                 this.address.getPlace(),
                 this.address.getNumber(),
                 this.address.getComplement(),
-                this.address.getNeighborhood()
+                this.address.getNeighborhood(),
+                city
         );
         return new Restaurant(this.name, this.deliveryTax, kitchen, address);
     }
