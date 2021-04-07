@@ -1,8 +1,10 @@
 package com.armando.algafoodapicdd.domain.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
-// Carga intrínsica = 0; Limite = 9
+// Carga intrínsica = 1; Limite = 9
 @Entity
 @Table(name = "tb_state")
 public class State {
@@ -13,6 +15,10 @@ public class State {
 
     @Column(nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "state")
+    // Carga: +1 (City)
+    private Set<City> cities = new HashSet<>();
 
     @Deprecated
     public State() {
@@ -29,4 +35,13 @@ public class State {
     public String getName() {
         return name;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean hasAnyCity() {
+        return !cities.isEmpty();
+    }
+
 }
