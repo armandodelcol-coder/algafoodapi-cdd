@@ -6,6 +6,7 @@ import com.armando.algafoodapicdd.domain.model.City;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+// Carga intrínsica = 1; Limite = 9
 public class AddressRequest {
 
     @NotBlank
@@ -23,6 +24,7 @@ public class AddressRequest {
     private String neighborhood;
 
     @NotNull
+    // Carga: +1 (City)
     @ExistsId(domainClass = City.class)
     private Long cityId;
 

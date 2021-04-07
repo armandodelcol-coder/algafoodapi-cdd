@@ -5,16 +5,19 @@ import com.armando.algafoodapicdd.domain.model.Restaurant;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
+// Carga intrínsica = 2; Limite = 7
 public class RestaurantResponse {
 
     private Long id;
     private String name;
     private BigDecimal deliveryTax;
+    // Carga: +1 (KitchenResponse)
     private KitchenResponse kitchen;
     private Boolean active;
     private Boolean open;
     private OffsetDateTime createdAt;
     private OffsetDateTime updatedAt;
+    // Carga: +1 (AddressResponse)
     private AddressResponse address;
 
     public RestaurantResponse(Restaurant restaurant) {

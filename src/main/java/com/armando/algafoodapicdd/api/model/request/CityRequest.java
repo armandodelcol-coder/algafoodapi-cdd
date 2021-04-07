@@ -9,12 +9,14 @@ import javax.persistence.EntityManager;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+// Carga intrínsica = 2; Limite = 9
 public class CityRequest {
 
     @NotBlank
     private String name;
 
     @NotNull
+    // Carga: +1 (State)
     @ExistsId(domainClass = State.class)
     private Long stateId;
 
@@ -23,6 +25,7 @@ public class CityRequest {
         this.stateId = stateId;
     }
 
+    // Carga: +1 (City)
     public City toModel(EntityManager manager) {
         State state = manager.find(State.class, stateId);
         Assert.state(state != null, "Não é permitido criar uma Cidade com um Estado inexistente");

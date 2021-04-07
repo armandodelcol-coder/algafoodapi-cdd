@@ -2,6 +2,7 @@ package com.armando.algafoodapicdd.domain.model;
 
 import javax.persistence.*;
 
+// Carga intrínsica = 1; Limite = 9
 @Embeddable
 public class Address {
 
@@ -22,6 +23,7 @@ public class Address {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_city_id", nullable = false)
+    // Carga: +1 (City)
     private City city;
 
     @Deprecated

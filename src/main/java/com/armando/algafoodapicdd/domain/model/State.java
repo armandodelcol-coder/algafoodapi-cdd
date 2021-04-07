@@ -2,6 +2,7 @@ package com.armando.algafoodapicdd.domain.model;
 
 import javax.persistence.*;
 
+// Carga intrínsica = 0; Limite = 9
 @Entity
 @Table(name = "tb_state")
 public class State {

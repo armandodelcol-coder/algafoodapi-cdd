@@ -9,6 +9,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.List;
 
+// Carga intrínsica = 0; Limite = 7
 public class UniqueValueValidator implements ConstraintValidator<UniqueValue, Object> {
 
     private String domainAttribute;

@@ -5,6 +5,7 @@ import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+// Carga intrínsica = 1; Limite = 7
 public class ExistsIdValidator implements ConstraintValidator<ExistsId, Object> {
 
     private Class<?> aClass;
@@ -19,6 +20,7 @@ public class ExistsIdValidator implements ConstraintValidator<ExistsId, Object> 
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext constraintValidatorContext) {
+        // Carga: +1 (branch if)
         if (value == null) return true;
         Object possibleObject = manager.find(aClass, value);
         return possibleObject != null;

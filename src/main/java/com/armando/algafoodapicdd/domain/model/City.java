@@ -3,6 +3,7 @@ package com.armando.algafoodapicdd.domain.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+// Carga intrínsica = 1; Limite = 9
 @Entity
 @Table(name = "tb_city")
 public class City {
@@ -16,6 +17,7 @@ public class City {
 
     @ManyToOne
     @JoinColumn(name = "state_id", nullable = false)
+    // Carga: +1 (State)
     private State state;
 
     @Deprecated

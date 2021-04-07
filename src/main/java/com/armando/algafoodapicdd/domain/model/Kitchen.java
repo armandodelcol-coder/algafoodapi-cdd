@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+// Carga intrínsica = 1; Limite = 9
 @Entity
 @Table(name = "tb_kitchen")
 public class Kitchen {
@@ -16,6 +17,7 @@ public class Kitchen {
     private String name;
 
     @OneToMany(mappedBy = "kitchen")
+    // Carga: +1 (Restaurant)
     private Set<Restaurant> restaurants = new HashSet<>();
 
     @Deprecated

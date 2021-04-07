@@ -2,6 +2,7 @@ package com.armando.algafoodapicdd.api.model.response;
 
 import com.armando.algafoodapicdd.domain.model.Address;
 
+// Carga intrínsica = 2; Limite = 7
 public class AddressResponse {
 
     private String zipcode;
@@ -9,8 +10,10 @@ public class AddressResponse {
     private String number;
     private String neighborhood;
     private String complement;
+    // Carga: +1 (CityResponse)
     private CityResponse city;
 
+    // Carga: +1 (Address)
     public AddressResponse(Address address) {
         this.zipcode = address.getZipcode();
         this.place = address.getPlace();

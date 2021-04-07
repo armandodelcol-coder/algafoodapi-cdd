@@ -15,9 +15,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 
+// Carga intrínsica = 4; Limite = 9
 public class RestaurantRequest {
 
     @NotBlank
+    // Carga: +1 (Restaurant)
     @UniqueValue(domainClass = Restaurant.class, fieldName = "name")
     private String name;
 
@@ -26,11 +28,13 @@ public class RestaurantRequest {
     private BigDecimal deliveryTax;
 
     @NotNull
+    // Carga: +1 (Kitchen)
     @ExistsId(domainClass = Kitchen.class)
     private Long kitchenId;
 
     @NotNull
     @Valid
+    // Carga: +1 (AddressRequest)
     private AddressRequest address;
 
     public String getName() {
@@ -53,6 +57,7 @@ public class RestaurantRequest {
         Kitchen kitchen = manager.find(Kitchen.class, this.kitchenId);
         Assert.state(kitchen != null, "Não é possível criar um Restaurante com uma Cozinha inexistente");
 
+        // Carga: +1 (City)
         City city = manager.find(City.class, this.address.getCityId());
         Assert.state(city != null, "Não é possível criar um Endereço com uma Cidade inexistente");
 
