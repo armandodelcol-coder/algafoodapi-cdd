@@ -49,9 +49,7 @@ public class CrudKitchensController {
     @GetMapping("/{kitchenId}")
     @ResponseStatus(HttpStatus.OK)
     public KitchenResponse findById(@PathVariable Long kitchenId) {
-        Kitchen kitchen = manager.find(Kitchen.class, kitchenId);
-        // Carga: +1 (EntityNotFoundVerification)
-        EntityNotFoundVerification.dispatchIfEntityIsNull(kitchen, "Cozinha não encontrada.");
+        Kitchen kitchen = findKitchenOrFail(kitchenId);
         return new KitchenResponse(kitchen);
     }
 
@@ -62,8 +60,7 @@ public class CrudKitchensController {
             @RequestBody @Valid KitchenRequest kitchenRequest,
             @PathVariable Long kitchenId
     ) {
-        Kitchen kitchen = manager.find(Kitchen.class, kitchenId);
-        EntityNotFoundVerification.dispatchIfEntityIsNull(kitchen, "Cozinha não encontrada.");
+        Kitchen kitchen = findKitchenOrFail(kitchenId);
         kitchen.setName(kitchenRequest.getName());
         manager.persist(kitchen);
         return new KitchenResponse(kitchen);
@@ -72,8 +69,7 @@ public class CrudKitchensController {
     @DeleteMapping("/{kitchenId}")
     @Transactional
     public ResponseEntity<?> delete(@PathVariable Long kitchenId) {
-        Kitchen kitchen = manager.find(Kitchen.class, kitchenId);
-        EntityNotFoundVerification.dispatchIfEntityIsNull(kitchen, "Cozinha não encontrada.");
+        Kitchen kitchen = findKitchenOrFail(kitchenId);
         // Carga: +1 (branch if)
         if (kitchen.hasAnyRestaurant()) {
             return ResponseEntity.badRequest().body(
@@ -88,6 +84,13 @@ public class CrudKitchensController {
         }
         manager.remove(kitchen);
         return ResponseEntity.noContent().build();
+    }
+
+    private Kitchen findKitchenOrFail(Long kitchenId) {
+        Kitchen kitchen = manager.find(Kitchen.class, kitchenId);
+        // Carga: +1 (EntityNotFoundVerification)
+        EntityNotFoundVerification.dispatchIfEntityIsNull(kitchen, "Cozinha não encontrada.");
+        return kitchen;
     }
 
 }
