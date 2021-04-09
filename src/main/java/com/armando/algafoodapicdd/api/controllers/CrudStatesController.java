@@ -3,6 +3,7 @@ package com.armando.algafoodapicdd.api.controllers;
 import com.armando.algafoodapicdd.api.exceptionhandler.CustomErrorResponseBody;
 import com.armando.algafoodapicdd.api.model.request.StateRequest;
 import com.armando.algafoodapicdd.api.model.response.StateResponse;
+import com.armando.algafoodapicdd.api.utils.EntityNotFoundVerification;
 import com.armando.algafoodapicdd.domain.model.State;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
 import java.time.OffsetDateTime;
@@ -54,7 +54,8 @@ public class CrudStatesController {
             @RequestBody @Valid StateRequest stateRequest
     ) {
         State state = manager.find(State.class, stateId);
-        checkStateExistence(state);
+        // Carga: +1 (EntityNotFoundVerification)
+        EntityNotFoundVerification.dispatchIfEntityIsNull(state, "Estado não encontrado.");
         state.setName(stateRequest.getName());
         manager.persist(state);
         return new StateResponse(state);
@@ -64,7 +65,7 @@ public class CrudStatesController {
     @Transactional
     public ResponseEntity<?> delete(@PathVariable Long stateId) {
         State state = manager.find(State.class, stateId);
-        checkStateExistence(state);
+        EntityNotFoundVerification.dispatchIfEntityIsNull(state, "Estado não encontrado.");
         // Carga: +1 (branch if)
         if (state.hasAnyCity()) {
             return ResponseEntity.badRequest().body(
@@ -80,11 +81,6 @@ public class CrudStatesController {
 
         manager.remove(state);
         return ResponseEntity.noContent().build();
-    }
-
-    private void checkStateExistence(State state) {
-        // Carga: +1 (branch if)
-        if (state == null) throw new EntityNotFoundException("Estado não encontrado.");
     }
 
 }

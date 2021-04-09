@@ -3,6 +3,7 @@ package com.armando.algafoodapicdd.api.controllers;
 import com.armando.algafoodapicdd.api.exceptionhandler.CustomErrorResponseBody;
 import com.armando.algafoodapicdd.api.model.request.CityRequest;
 import com.armando.algafoodapicdd.api.model.response.CityResponse;
+import com.armando.algafoodapicdd.api.utils.EntityNotFoundVerification;
 import com.armando.algafoodapicdd.api.validator.CityAlreadyExistsInStateValidator;
 import com.armando.algafoodapicdd.domain.model.City;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,17 +14,14 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
 import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
-// Carga intrínsica = 8; Limite = 7
+// Carga intrínsica = 7; Limite = 7
 @RestController
 @RequestMapping("/cities")
-public class CrudCitiesController {
+public class RegisterCitiesController {
 
     @Autowired
     // Carga: +1 (CityAlreadyExistsInStateValidator)
@@ -48,23 +46,6 @@ public class CrudCitiesController {
         return new CityResponse(city);
     }
 
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<CityResponse> list() {
-        return manager.createQuery("SELECT city from City city join fetch city.state", City.class).getResultList()
-                // Carga: +1 (função como argumento no map)
-                .stream().map(city -> new CityResponse(city))
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("/{cityId}")
-    @ResponseStatus(HttpStatus.OK)
-    public CityResponse findById(@PathVariable Long cityId) {
-        City city = manager.find(City.class, cityId);
-        checkCityExistence(city);
-        return new CityResponse(city);
-    }
-
     @PutMapping("/{cityId}")
     @ResponseStatus(HttpStatus.OK)
     @Transactional
@@ -73,7 +54,8 @@ public class CrudCitiesController {
             @RequestBody @Valid CityRequest cityRequest
     ) {
         City city = manager.find(City.class, cityId);
-        checkCityExistence(city);
+        // Carga: +1 (EntityVerification)
+        EntityNotFoundVerification.dispatchIfEntityIsNull(city, "Cidade não encontrada.");
         city.setPropertiesToUpdate(cityRequest, manager);
         manager.persist(city);
         return new CityResponse(city);
@@ -83,7 +65,7 @@ public class CrudCitiesController {
     @Transactional
     public ResponseEntity<?> delete(@PathVariable Long cityId) {
         City city = manager.find(City.class, cityId);
-        checkCityExistence(city);
+        EntityNotFoundVerification.dispatchIfEntityIsNull(city, "Cidade não encontrada.");
         // Carga: +1 (branch if)
         if (city.hasAnyRestaurantWithThisCityRegistered(manager)) {
             return ResponseEntity.badRequest().body(
@@ -99,11 +81,6 @@ public class CrudCitiesController {
 
         manager.remove(city);
         return ResponseEntity.noContent().build();
-    }
-
-    private void checkCityExistence(City city) {
-        // Carga: +1 (branch if)
-        if (city == null) throw new EntityNotFoundException("Cidade não encontrada.");
     }
 
 }
