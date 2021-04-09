@@ -3,13 +3,13 @@ package com.armando.algafoodapicdd.api.controllers;
 import com.armando.algafoodapicdd.api.model.request.RestaurantRequest;
 import com.armando.algafoodapicdd.api.model.response.RestaurantResponse;
 import com.armando.algafoodapicdd.api.model.response.RestaurantSummaryResponse;
+import com.armando.algafoodapicdd.api.utils.EntityNotFoundVerification;
 import com.armando.algafoodapicdd.domain.model.Restaurant;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
 import java.util.List;
@@ -50,9 +50,32 @@ public class CrudRestaurantsController {
     @ResponseStatus(HttpStatus.OK)
     public RestaurantResponse findById(@PathVariable Long restaurantId) {
         Restaurant restaurant = manager.find(Restaurant.class, restaurantId);
-        // Carga: +1 (branch if)
-        if (restaurant == null) throw new EntityNotFoundException("Restaurante não encontrado");
+        // Carga: +1 (EntityNotFoundVerification)
+        EntityNotFoundVerification.dispatchIfEntityIsNull(restaurant, "Restaurante não encontrado.");
         return new RestaurantResponse(restaurant);
+    }
+
+    @PutMapping("/{restaurantId}")
+    @ResponseStatus(HttpStatus.OK)
+    @Transactional
+    public RestaurantResponse update(
+            @PathVariable Long restaurantId,
+            @RequestBody @Valid RestaurantRequest restaurantRequest
+    ) {
+        Restaurant restaurant = manager.find(Restaurant.class, restaurantId);
+        EntityNotFoundVerification.dispatchIfEntityIsNull(restaurant, "Restaurante não encontrado.");
+        restaurant.setPropertiesToUpdate(restaurantRequest, manager);
+        manager.persist(restaurant);
+        return new RestaurantResponse(restaurant);
+    }
+
+    @DeleteMapping("/{restaurantId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Transactional
+    public void delete(@PathVariable Long restaurantId) {
+        Restaurant restaurant = manager.find(Restaurant.class, restaurantId);
+        EntityNotFoundVerification.dispatchIfEntityIsNull(restaurant, "Restaurante não encontrado.");
+        manager.remove(restaurant);
     }
 
 }

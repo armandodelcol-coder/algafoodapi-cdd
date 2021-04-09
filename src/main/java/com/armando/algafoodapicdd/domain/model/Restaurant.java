@@ -1,13 +1,15 @@
 package com.armando.algafoodapicdd.domain.model;
 
+import com.armando.algafoodapicdd.api.model.request.RestaurantRequest;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-// Carga intrínsica = 2; Limite = 9
+// Carga intrínsica = 4; Limite = 9
 @Entity
 @Table(name = "tb_restaurant")
 public class Restaurant {
@@ -89,4 +91,29 @@ public class Restaurant {
     public Address getAddress() {
         return address;
     }
+
+    // Carga: +1 (RestaurantRequest)
+    public void setPropertiesToUpdate(RestaurantRequest restaurantRequest, EntityManager manager) {
+        Assert.state(restaurantRequest != null, "Não é permitido informar um objeto restaurantRequest nulo para atualizar os dados de restaurante.");
+
+        Kitchen kitchen = manager.find(Kitchen.class, restaurantRequest.getKitchenId());
+        Assert.state(kitchen != null, "Não é permitido informar uma cozinha inexistente para atualizar os dados de restaurante.");
+
+        // Carga: +1 (City)
+        City city = manager.find(City.class, restaurantRequest.getAddress().getCityId());
+        Assert.state(city != null, "Não é permitido informar uma cidade inexistente para atualizar os dados de restaurante.");
+
+        this.name = restaurantRequest.getName();
+        this.deliveryTax = restaurantRequest.getDeliveryTax();
+        this.kitchen = kitchen;
+        this.address = new Address(
+                restaurantRequest.getAddress().getZipcode(),
+                restaurantRequest.getAddress().getPlace(),
+                restaurantRequest.getAddress().getNumber(),
+                restaurantRequest.getAddress().getComplement(),
+                restaurantRequest.getAddress().getNeighborhood(),
+                city
+        );
+    }
+
 }
