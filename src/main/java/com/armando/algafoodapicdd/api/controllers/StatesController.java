@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 // Carga intrínsica = 7; Limite = 7
 @RestController
 @RequestMapping("/states")
-public class CrudStatesController {
+public class StatesController {
 
     @PersistenceContext
     private EntityManager manager;

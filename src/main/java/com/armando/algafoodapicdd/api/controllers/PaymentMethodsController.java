@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 // Carga intrínsica = 5; Limite = 7
 @RestController
 @RequestMapping("/paymentmethods")
-public class CrudPaymentMethodsController {
+public class PaymentMethodsController {
 
     @PersistenceContext
     private EntityManager manager;
