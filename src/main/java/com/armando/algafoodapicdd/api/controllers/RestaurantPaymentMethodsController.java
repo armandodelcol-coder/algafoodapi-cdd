@@ -1,10 +1,10 @@
 package com.armando.algafoodapicdd.api.controllers;
 
-import com.armando.algafoodapicdd.api.exceptionhandler.CustomErrorResponseBody;
-import com.armando.algafoodapicdd.api.utils.RestaurantPaymentMethodUtil;
+import com.armando.algafoodapicdd.api.helpers.ErrorResponseBodyHelper;
 import com.armando.algafoodapicdd.api.model.request.PaymentMethodAssociationRequest;
 import com.armando.algafoodapicdd.api.model.response.PaymentMethodResponse;
 import com.armando.algafoodapicdd.api.utils.EntityNotFoundVerification;
+import com.armando.algafoodapicdd.api.utils.RestaurantPaymentMethodUtil;
 import com.armando.algafoodapicdd.domain.model.PaymentMethod;
 import com.armando.algafoodapicdd.domain.model.Restaurant;
 import org.springframework.http.HttpStatus;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +49,8 @@ public class RestaurantPaymentMethodsController {
         // Carga: +1 (RestaurantPaymentMethodHelper); +1 (branch if)
         if (RestaurantPaymentMethodUtil.existsInRestaurant(restaurant, request.getPaymentMethodId())) {
             return ResponseEntity.badRequest().body(
-                    badRequestResponseBody("Já existe essa forma de pagamento associada nesse restaurante.")
+                    // Carga: +1 (ErrorResponseBodyHelper)
+                    ErrorResponseBodyHelper.badRequest("Já existe essa forma de pagamento associada nesse restaurante.")
             );
         }
 
@@ -69,7 +69,7 @@ public class RestaurantPaymentMethodsController {
         // Carga: +1 (branch if)
         if (!RestaurantPaymentMethodUtil.existsInRestaurant(restaurant, request.getPaymentMethodId())) {
             return ResponseEntity.badRequest().body(
-                    badRequestResponseBody("A forma de pagamento informada não está associada nesse restaurante.")
+                    ErrorResponseBodyHelper.badRequest("A forma de pagamento informada não está associada nesse restaurante.")
             );
         }
 
@@ -83,16 +83,6 @@ public class RestaurantPaymentMethodsController {
         // Carga: +1 (EntityNotFoundVerification)
         EntityNotFoundVerification.dispatchIfEntityIsNull(restaurant, "Restaurante não encontrado.");
         return restaurant;
-    }
-
-    private CustomErrorResponseBody badRequestResponseBody(String message) {
-        // Carga: +1 (CustomErrorResponseBody)
-        return new CustomErrorResponseBody(
-                HttpStatus.BAD_REQUEST.value(),
-                HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                message,
-                OffsetDateTime.now()
-        );
     }
 
 }
