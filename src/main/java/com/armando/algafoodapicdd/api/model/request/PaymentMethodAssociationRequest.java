@@ -5,7 +5,7 @@ import com.armando.algafoodapicdd.domain.model.PaymentMethod;
 
 import javax.validation.constraints.NotNull;
 
-public class AssociatePaymentMethodRequest {
+public class PaymentMethodAssociationRequest {
 
     @NotNull
     @ExistsId(domainClass = PaymentMethod.class)

@@ -2,7 +2,7 @@ package com.armando.algafoodapicdd.api.controllers;
 
 import com.armando.algafoodapicdd.api.exceptionhandler.CustomErrorResponseBody;
 import com.armando.algafoodapicdd.api.helpers.RestaurantPaymentMethodHelper;
-import com.armando.algafoodapicdd.api.model.request.AssociatePaymentMethodRequest;
+import com.armando.algafoodapicdd.api.model.request.PaymentMethodAssociationRequest;
 import com.armando.algafoodapicdd.api.model.response.PaymentMethodResponse;
 import com.armando.algafoodapicdd.api.utils.EntityNotFoundVerification;
 import com.armando.algafoodapicdd.domain.model.PaymentMethod;
@@ -19,7 +19,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// Carga intrínsica = 7; Limite = 7
+// Carga intrínsica = 9; Limite = 7
 @RestController
 @RequestMapping("/restaurants/{restaurantId}/paymentmethods")
 public class RestaurantPaymentMethodsController {
@@ -44,10 +44,10 @@ public class RestaurantPaymentMethodsController {
     // Carga: +1 (AssociatePaymentMethodRequest)
     public ResponseEntity<?> associatePaymentMethod(
             @PathVariable Long restaurantId,
-            @RequestBody @Valid AssociatePaymentMethodRequest request
+            @RequestBody @Valid PaymentMethodAssociationRequest request
     ) {
         Restaurant restaurant = findRestaurantOrFail(restaurantId);
-        // Carga: +1 (RestaurantPaymentMethodHelper)
+        // Carga: +1 (RestaurantPaymentMethodHelper); +1 (branch if)
         if (RestaurantPaymentMethodHelper.existsInRestaurant(restaurant, request.getPaymentMethodId())) {
             return ResponseEntity.badRequest().body(
                     badRequestResponseBody("Já existe essa forma de pagamento associada nesse restaurante.")
@@ -63,9 +63,10 @@ public class RestaurantPaymentMethodsController {
     @Transactional
     public ResponseEntity<?> dissociatePaymentMethod(
             @PathVariable Long restaurantId,
-            @RequestBody @Valid AssociatePaymentMethodRequest request
+            @RequestBody @Valid PaymentMethodAssociationRequest request
     ) {
         Restaurant restaurant = findRestaurantOrFail(restaurantId);
+        // Carga: +1 (branch if)
         if (!RestaurantPaymentMethodHelper.existsInRestaurant(restaurant, request.getPaymentMethodId())) {
             return ResponseEntity.badRequest().body(
                     badRequestResponseBody("A forma de pagamento informada não está associada nesse restaurante.")

@@ -8,6 +8,7 @@ delete from tb_payment_method;
 delete from tb_restaurant_payment_method;
 delete from tb_permission;
 delete from tb_group;
+delete from tb_group_permission;
 
 set foreign_key_checks = 1;
 
@@ -67,3 +68,7 @@ INSERT INTO tb_permission (name, description) VALUES ('Controlador cozinhas', 'P
 
 INSERT INTO tb_group(name) VALUES ('Grupo 1');
 INSERT INTO tb_group(name) VALUES ('Grupo 2');
+
+INSERT INTO tb_group_permission(group_id, permission_id) VALUES (1, 1);
+INSERT INTO tb_group_permission(group_id, permission_id) VALUES (2, 2);
+INSERT INTO tb_group_permission(group_id, permission_id) VALUES (2, 4);
