@@ -1,7 +1,7 @@
 package com.armando.algafoodapicdd.api.controllers;
 
 import com.armando.algafoodapicdd.api.exceptionhandler.CustomErrorResponseBody;
-import com.armando.algafoodapicdd.api.helpers.RestaurantPaymentMethodHelper;
+import com.armando.algafoodapicdd.api.utils.RestaurantPaymentMethodUtil;
 import com.armando.algafoodapicdd.api.model.request.PaymentMethodAssociationRequest;
 import com.armando.algafoodapicdd.api.model.response.PaymentMethodResponse;
 import com.armando.algafoodapicdd.api.utils.EntityNotFoundVerification;
@@ -48,7 +48,7 @@ public class RestaurantPaymentMethodsController {
     ) {
         Restaurant restaurant = findRestaurantOrFail(restaurantId);
         // Carga: +1 (RestaurantPaymentMethodHelper); +1 (branch if)
-        if (RestaurantPaymentMethodHelper.existsInRestaurant(restaurant, request.getPaymentMethodId())) {
+        if (RestaurantPaymentMethodUtil.existsInRestaurant(restaurant, request.getPaymentMethodId())) {
             return ResponseEntity.badRequest().body(
                     badRequestResponseBody("Já existe essa forma de pagamento associada nesse restaurante.")
             );
@@ -67,7 +67,7 @@ public class RestaurantPaymentMethodsController {
     ) {
         Restaurant restaurant = findRestaurantOrFail(restaurantId);
         // Carga: +1 (branch if)
-        if (!RestaurantPaymentMethodHelper.existsInRestaurant(restaurant, request.getPaymentMethodId())) {
+        if (!RestaurantPaymentMethodUtil.existsInRestaurant(restaurant, request.getPaymentMethodId())) {
             return ResponseEntity.badRequest().body(
                     badRequestResponseBody("A forma de pagamento informada não está associada nesse restaurante.")
             );

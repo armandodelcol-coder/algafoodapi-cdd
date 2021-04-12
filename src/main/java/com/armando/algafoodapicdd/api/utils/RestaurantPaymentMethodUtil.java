@@ -1,4 +1,4 @@
-package com.armando.algafoodapicdd.api.helpers;
+package com.armando.algafoodapicdd.api.utils;
 
 import com.armando.algafoodapicdd.domain.model.PaymentMethod;
 import com.armando.algafoodapicdd.domain.model.Restaurant;
@@ -6,7 +6,7 @@ import com.armando.algafoodapicdd.domain.model.Restaurant;
 import java.util.Optional;
 
 // Carga intrínsica = 3; Limite = 7
-public abstract class RestaurantPaymentMethodHelper {
+public abstract class RestaurantPaymentMethodUtil {
 
     // Carga: +1 (Restaurant)
     public static Boolean existsInRestaurant(Restaurant restaurant, Long paymentMethodId) {
