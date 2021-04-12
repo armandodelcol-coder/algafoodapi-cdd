@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 
 // Carga intrínsica = 0; Limite = 9
 @Entity
-@Table(name = "tb_paymentmethod")
+@Table(name = "tb_payment_method")
 public class PaymentMethod {
 
     @Id

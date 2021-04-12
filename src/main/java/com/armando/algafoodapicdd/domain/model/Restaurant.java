@@ -8,8 +8,11 @@ import org.springframework.util.Assert;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
-// Carga intrínsica = 4; Limite = 9
+// Carga intrínsica = 5; Limite = 9
 @Entity
 @Table(name = "tb_restaurant")
 public class Restaurant {
@@ -44,6 +47,13 @@ public class Restaurant {
     @Embedded
     // Carga: +1 (Address)
     private Address address;
+
+    @ManyToMany
+    @JoinTable(name = "tb_restaurant_payment_method",
+            joinColumns = @JoinColumn(name = "restaurant_id"),
+            inverseJoinColumns = @JoinColumn(name = "payment_method_id"))
+    // Carga: +1 (PaymentMethod)
+    private Set<PaymentMethod> paymentMethods = new HashSet<>();
 
     @Deprecated
     public Restaurant() {
@@ -92,6 +102,10 @@ public class Restaurant {
         return address;
     }
 
+    public Set<PaymentMethod> getPaymentMethods() {
+        return paymentMethods;
+    }
+
     // Carga: +1 (RestaurantRequest)
     public void setPropertiesToUpdate(RestaurantRequest restaurantRequest, EntityManager manager) {
         Assert.state(restaurantRequest != null, "Não é permitido informar um objeto restaurantRequest nulo para atualizar os dados de restaurante.");
@@ -114,6 +128,16 @@ public class Restaurant {
                 restaurantRequest.getAddress().getNeighborhood(),
                 city
         );
+    }
+
+    public void associatePaymentMethod(PaymentMethod paymentMethod) {
+        Assert.state(paymentMethod != null, "Está tentando associar uma forma de pagamento no restaurante passando um valor nulo como parâmetro.");
+
+        this.paymentMethods.add(paymentMethod);
+    }
+
+    public void dissociatePaymentMethod(PaymentMethod paymentMethod) {
+        this.paymentMethods.remove(paymentMethod);
     }
 
 }

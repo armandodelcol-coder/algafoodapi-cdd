@@ -4,7 +4,8 @@ delete from tb_kitchen;
 delete from tb_restaurant;
 delete from tb_state;
 delete from tb_city;
-delete from tb_paymentmethod;
+delete from tb_payment_method;
+delete from tb_restaurant_payment_method;
 
 set foreign_key_checks = 1;
 
@@ -12,7 +13,7 @@ alter table tb_kitchen auto_increment = 1;
 alter table tb_restaurant auto_increment = 1;
 alter table tb_state auto_increment = 1;
 alter table tb_city auto_increment = 1;
-alter table tb_paymentmethod auto_increment = 1;
+alter table tb_payment_method auto_increment = 1;
 
 INSERT INTO tb_kitchen (name) VALUES ('Tailandesa');
 INSERT INTO tb_kitchen (name) VALUES ('Indiana');
@@ -39,6 +40,18 @@ INSERT INTO tb_restaurant (name, delivery_tax, created_at, updated_at, kitchen_i
 INSERT INTO tb_restaurant (name, delivery_tax, created_at, updated_at, kitchen_id, address_place, address_complement, address_neighborhood, address_number, address_zipcode, address_city_id) VALUES ("China In Box", 7, utc_timestamp, utc_timestamp, 5, "Avenida 37", null, "Centro", "100", "12915000", 3);
 INSERT INTO tb_restaurant (name, delivery_tax, created_at, updated_at, kitchen_id, address_place, address_complement, address_neighborhood, address_number, address_zipcode, address_city_id) VALUES ("Tex&Mex", 12, utc_timestamp, utc_timestamp, 6, "Avenida 77", null, "São Lourenço", "100-A", "12915000", 4);
 
-INSERT INTO tb_paymentmethod (description) VALUES ('Dinheiro');
-INSERT INTO tb_paymentmethod (description) VALUES ('Cartão de Débito');
-INSERT INTO tb_paymentmethod (description) VALUES ('Cartão de Crédito');
+INSERT INTO tb_payment_method (description) VALUES ('Dinheiro');
+INSERT INTO tb_payment_method (description) VALUES ('Cartão de Débito');
+INSERT INTO tb_payment_method (description) VALUES ('Cartão de Crédito');
+
+INSERT INTO tb_restaurant_payment_method (restaurant_id, payment_method_id) VALUES (1, 1);
+INSERT INTO tb_restaurant_payment_method (restaurant_id, payment_method_id) VALUES (1, 2);
+INSERT INTO tb_restaurant_payment_method (restaurant_id, payment_method_id) VALUES (1, 3);
+INSERT INTO tb_restaurant_payment_method (restaurant_id, payment_method_id) VALUES (2, 2);
+INSERT INTO tb_restaurant_payment_method (restaurant_id, payment_method_id) VALUES (2, 3);
+INSERT INTO tb_restaurant_payment_method (restaurant_id, payment_method_id) VALUES (3, 1);
+INSERT INTO tb_restaurant_payment_method (restaurant_id, payment_method_id) VALUES (4, 3);
+INSERT INTO tb_restaurant_payment_method (restaurant_id, payment_method_id) VALUES (5, 3);
+INSERT INTO tb_restaurant_payment_method (restaurant_id, payment_method_id) VALUES (6, 1);
+INSERT INTO tb_restaurant_payment_method (restaurant_id, payment_method_id) VALUES (7, 2);
+INSERT INTO tb_restaurant_payment_method (restaurant_id, payment_method_id) VALUES (8, 3);
