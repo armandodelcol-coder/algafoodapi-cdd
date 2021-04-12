@@ -1,12 +1,13 @@
 package com.armando.algafoodapicdd.domain.model;
 
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
-// Carga intrínsica = 0; Limite = 9
+// Carga intrínsica = 1; Limite = 9
 @Entity
 @Table(name = "tb_payment_method")
 public class PaymentMethod {
@@ -17,6 +18,13 @@ public class PaymentMethod {
 
     @Column(nullable = false)
     private String description;
+
+    @ManyToMany
+    @JoinTable(name = "tb_restaurant_payment_method",
+            joinColumns = @JoinColumn(name = "restaurant_id"),
+            inverseJoinColumns = @JoinColumn(name = "payment_method_id"))
+    // Carga: +1 (PaymentMethod)
+    private List<Restaurant> restaurants = new ArrayList<>();
 
     @Deprecated
     public PaymentMethod() {
@@ -40,6 +48,10 @@ public class PaymentMethod {
         Assert.state(!description.isBlank(), "Não é permitido setar uma descrição de forma de pagamento nula ou em branco.");
 
         this.description = description;
+    }
+
+    public boolean isAssociateWithAnyRestaurant() {
+        return !restaurants.isEmpty();
     }
 
 }

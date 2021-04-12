@@ -1,20 +1,23 @@
 package com.armando.algafoodapicdd.api.controllers;
 
+import com.armando.algafoodapicdd.api.exceptionhandler.CustomErrorResponseBody;
 import com.armando.algafoodapicdd.api.model.request.PaymentMethodRequest;
 import com.armando.algafoodapicdd.api.model.response.PaymentMethodResponse;
 import com.armando.algafoodapicdd.api.utils.EntityNotFoundVerification;
 import com.armando.algafoodapicdd.domain.model.PaymentMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// Carga intrínsica = 5; Limite = 7
+// Carga intrínsica = 7; Limite = 7
 @RestController
 @RequestMapping("/paymentmethods")
 public class PaymentMethodsController {
@@ -56,11 +59,24 @@ public class PaymentMethodsController {
     }
 
     @DeleteMapping("/{paymentMethodId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
-    public void delete(@PathVariable Long paymentMethodId) {
+    public ResponseEntity<?> delete(@PathVariable Long paymentMethodId) {
         PaymentMethod paymentMethod = findPaymentMethodOrFail(paymentMethodId);
+        // Carga: +1 (branch if);
+        if (paymentMethod.isAssociateWithAnyRestaurant()) {
+            return ResponseEntity.badRequest().body(
+                    // Carga: +1 (CustomErrorResponseBody);
+                    new CustomErrorResponseBody(
+                            HttpStatus.BAD_REQUEST.value(),
+                            HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                            "Existem Restaurantes associados a essa forma de pagamento",
+                            OffsetDateTime.now()
+                    )
+            );
+        }
+
         manager.remove(paymentMethod);
+        return ResponseEntity.noContent().build();
     }
 
     private PaymentMethod findPaymentMethodOrFail(Long paymentMethodId) {
