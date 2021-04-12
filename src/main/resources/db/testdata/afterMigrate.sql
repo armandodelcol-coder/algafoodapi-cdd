@@ -6,6 +6,7 @@ delete from tb_state;
 delete from tb_city;
 delete from tb_payment_method;
 delete from tb_restaurant_payment_method;
+delete from tb_permission;
 
 set foreign_key_checks = 1;
 
@@ -14,6 +15,7 @@ alter table tb_restaurant auto_increment = 1;
 alter table tb_state auto_increment = 1;
 alter table tb_city auto_increment = 1;
 alter table tb_payment_method auto_increment = 1;
+alter table tb_permission auto_increment = 1;
 
 INSERT INTO tb_kitchen (name) VALUES ('Tailandesa');
 INSERT INTO tb_kitchen (name) VALUES ('Indiana');
@@ -55,3 +57,8 @@ INSERT INTO tb_restaurant_payment_method (restaurant_id, payment_method_id) VALU
 INSERT INTO tb_restaurant_payment_method (restaurant_id, payment_method_id) VALUES (6, 1);
 INSERT INTO tb_restaurant_payment_method (restaurant_id, payment_method_id) VALUES (7, 2);
 INSERT INTO tb_restaurant_payment_method (restaurant_id, payment_method_id) VALUES (8, 3);
+
+INSERT INTO tb_permission (name, description) VALUES ('Administrador Geral', 'Permite realizar todas a operações do sistema.');
+INSERT INTO tb_permission (name, description) VALUES ('Leitura Geral', 'Permite realizar leitura de todas as tabelas do sistema.');
+INSERT INTO tb_permission (name, description) VALUES ('Criar cozinhas', 'Permite criar novas cozinhas');
+INSERT INTO tb_permission (name, description) VALUES ('Controlador cozinhas', 'Permite criar, atualizar, deletar e visualizar cozinhas');
