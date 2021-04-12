@@ -3,7 +3,7 @@ package com.armando.algafoodapicdd.api.controllers;
 import com.armando.algafoodapicdd.api.exceptionhandler.CustomErrorResponseBody;
 import com.armando.algafoodapicdd.api.model.request.KitchenRequest;
 import com.armando.algafoodapicdd.api.model.response.KitchenResponse;
-import com.armando.algafoodapicdd.api.utils.EntityNotFoundVerification;
+import com.armando.algafoodapicdd.api.helpers.EntityNotFoundVerificationHelper;
 import com.armando.algafoodapicdd.domain.model.Kitchen;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -89,7 +89,7 @@ public class KitchensController {
     private Kitchen findKitchenOrFail(Long kitchenId) {
         Kitchen kitchen = manager.find(Kitchen.class, kitchenId);
         // Carga: +1 (EntityNotFoundVerification)
-        EntityNotFoundVerification.dispatchIfEntityIsNull(kitchen, "Cozinha não encontrada.");
+        EntityNotFoundVerificationHelper.dispatchIfEntityIsNull(kitchen, "Cozinha não encontrada.");
         return kitchen;
     }
 

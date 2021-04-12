@@ -3,7 +3,7 @@ package com.armando.algafoodapicdd.api.controllers;
 import com.armando.algafoodapicdd.api.exceptionhandler.CustomErrorResponseBody;
 import com.armando.algafoodapicdd.api.model.request.CityRequest;
 import com.armando.algafoodapicdd.api.model.response.CityResponse;
-import com.armando.algafoodapicdd.api.utils.EntityNotFoundVerification;
+import com.armando.algafoodapicdd.api.helpers.EntityNotFoundVerificationHelper;
 import com.armando.algafoodapicdd.api.validator.CityAlreadyExistsInStateValidator;
 import com.armando.algafoodapicdd.domain.model.City;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class RegisterCitiesController {
     ) {
         City city = manager.find(City.class, cityId);
         // Carga: +1 (EntityVerification)
-        EntityNotFoundVerification.dispatchIfEntityIsNull(city, "Cidade não encontrada.");
+        EntityNotFoundVerificationHelper.dispatchIfEntityIsNull(city, "Cidade não encontrada.");
         city.setPropertiesToUpdate(cityRequest, manager);
         manager.persist(city);
         return new CityResponse(city);
@@ -65,7 +65,7 @@ public class RegisterCitiesController {
     @Transactional
     public ResponseEntity<?> delete(@PathVariable Long cityId) {
         City city = manager.find(City.class, cityId);
-        EntityNotFoundVerification.dispatchIfEntityIsNull(city, "Cidade não encontrada.");
+        EntityNotFoundVerificationHelper.dispatchIfEntityIsNull(city, "Cidade não encontrada.");
         // Carga: +1 (branch if)
         if (city.hasAnyRestaurantWithThisCityRegistered(manager)) {
             return ResponseEntity.badRequest().body(

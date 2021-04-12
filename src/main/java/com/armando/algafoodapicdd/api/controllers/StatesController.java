@@ -3,7 +3,7 @@ package com.armando.algafoodapicdd.api.controllers;
 import com.armando.algafoodapicdd.api.exceptionhandler.CustomErrorResponseBody;
 import com.armando.algafoodapicdd.api.model.request.StateRequest;
 import com.armando.algafoodapicdd.api.model.response.StateResponse;
-import com.armando.algafoodapicdd.api.utils.EntityNotFoundVerification;
+import com.armando.algafoodapicdd.api.helpers.EntityNotFoundVerificationHelper;
 import com.armando.algafoodapicdd.domain.model.State;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +55,7 @@ public class StatesController {
     ) {
         State state = manager.find(State.class, stateId);
         // Carga: +1 (EntityNotFoundVerification)
-        EntityNotFoundVerification.dispatchIfEntityIsNull(state, "Estado não encontrado.");
+        EntityNotFoundVerificationHelper.dispatchIfEntityIsNull(state, "Estado não encontrado.");
         state.setName(stateRequest.getName());
         manager.persist(state);
         return new StateResponse(state);
@@ -65,7 +65,7 @@ public class StatesController {
     @Transactional
     public ResponseEntity<?> delete(@PathVariable Long stateId) {
         State state = manager.find(State.class, stateId);
-        EntityNotFoundVerification.dispatchIfEntityIsNull(state, "Estado não encontrado.");
+        EntityNotFoundVerificationHelper.dispatchIfEntityIsNull(state, "Estado não encontrado.");
         // Carga: +1 (branch if)
         if (state.hasAnyCity()) {
             return ResponseEntity.badRequest().body(

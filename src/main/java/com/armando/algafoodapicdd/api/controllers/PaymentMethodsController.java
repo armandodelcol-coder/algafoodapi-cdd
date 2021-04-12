@@ -3,7 +3,7 @@ package com.armando.algafoodapicdd.api.controllers;
 import com.armando.algafoodapicdd.api.exceptionhandler.CustomErrorResponseBody;
 import com.armando.algafoodapicdd.api.model.request.PaymentMethodRequest;
 import com.armando.algafoodapicdd.api.model.response.PaymentMethodResponse;
-import com.armando.algafoodapicdd.api.utils.EntityNotFoundVerification;
+import com.armando.algafoodapicdd.api.helpers.EntityNotFoundVerificationHelper;
 import com.armando.algafoodapicdd.domain.model.PaymentMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -82,7 +82,7 @@ public class PaymentMethodsController {
     private PaymentMethod findPaymentMethodOrFail(Long paymentMethodId) {
         PaymentMethod paymentMethod = manager.find(PaymentMethod.class, paymentMethodId);
         // Carga: +1 (EntityNotFoundVerification);
-        EntityNotFoundVerification.dispatchIfEntityIsNull(paymentMethod, "Não existe uma forma de pagamento com esse id.");
+        EntityNotFoundVerificationHelper.dispatchIfEntityIsNull(paymentMethod, "Não existe uma forma de pagamento com esse id.");
         return paymentMethod;
     }
 

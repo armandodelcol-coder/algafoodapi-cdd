@@ -3,7 +3,7 @@ package com.armando.algafoodapicdd.api.controllers;
 import com.armando.algafoodapicdd.api.helpers.ErrorResponseBodyHelper;
 import com.armando.algafoodapicdd.api.model.request.GroupPermissionAssociationRequest;
 import com.armando.algafoodapicdd.api.model.response.PermissionResponse;
-import com.armando.algafoodapicdd.api.utils.EntityNotFoundVerification;
+import com.armando.algafoodapicdd.api.helpers.EntityNotFoundVerificationHelper;
 import com.armando.algafoodapicdd.api.utils.GroupPermissionUtil;
 import com.armando.algafoodapicdd.domain.model.Group;
 import com.armando.algafoodapicdd.domain.model.Permission;
@@ -79,7 +79,7 @@ public class GroupPermissionsController {
     private Group findOrFail(Long id) {
         Group group = manager.find(Group.class, id);
         // Carga: +1 (EntityNotFoundVerification)
-        EntityNotFoundVerification.dispatchIfEntityIsNull(group, "Grupo não encontrado.");
+        EntityNotFoundVerificationHelper.dispatchIfEntityIsNull(group, "Grupo não encontrado.");
         return group;
     }
 

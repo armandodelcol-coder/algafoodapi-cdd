@@ -2,7 +2,7 @@ package com.armando.algafoodapicdd.api.controllers;
 
 import com.armando.algafoodapicdd.api.model.request.PermissionRequest;
 import com.armando.algafoodapicdd.api.model.response.PermissionResponse;
-import com.armando.algafoodapicdd.api.utils.EntityNotFoundVerification;
+import com.armando.algafoodapicdd.api.helpers.EntityNotFoundVerificationHelper;
 import com.armando.algafoodapicdd.domain.model.Permission;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,7 +67,7 @@ public class PermissionsController {
     private Permission findPermissionOrFail(Long permissionId) {
         Permission permission = manager.find(Permission.class, permissionId);
         // Carga: +1 (EntityNotFoundVerification);
-        EntityNotFoundVerification.dispatchIfEntityIsNull(permission, "Não existe uma permissão com esse id.");
+        EntityNotFoundVerificationHelper.dispatchIfEntityIsNull(permission, "Não existe uma permissão com esse id.");
         return permission;
     }
 

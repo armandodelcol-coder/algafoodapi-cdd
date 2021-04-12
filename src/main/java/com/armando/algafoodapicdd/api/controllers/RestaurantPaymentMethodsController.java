@@ -3,7 +3,7 @@ package com.armando.algafoodapicdd.api.controllers;
 import com.armando.algafoodapicdd.api.helpers.ErrorResponseBodyHelper;
 import com.armando.algafoodapicdd.api.model.request.PaymentMethodAssociationRequest;
 import com.armando.algafoodapicdd.api.model.response.PaymentMethodResponse;
-import com.armando.algafoodapicdd.api.utils.EntityNotFoundVerification;
+import com.armando.algafoodapicdd.api.helpers.EntityNotFoundVerificationHelper;
 import com.armando.algafoodapicdd.api.utils.RestaurantPaymentMethodUtil;
 import com.armando.algafoodapicdd.domain.model.PaymentMethod;
 import com.armando.algafoodapicdd.domain.model.Restaurant;
@@ -81,7 +81,7 @@ public class RestaurantPaymentMethodsController {
     private Restaurant findRestaurantOrFail(Long id) {
         Restaurant restaurant = manager.find(Restaurant.class, id);
         // Carga: +1 (EntityNotFoundVerification)
-        EntityNotFoundVerification.dispatchIfEntityIsNull(restaurant, "Restaurante não encontrado.");
+        EntityNotFoundVerificationHelper.dispatchIfEntityIsNull(restaurant, "Restaurante não encontrado.");
         return restaurant;
     }
 
