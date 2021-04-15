@@ -5,8 +5,10 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
-// Carga intrínsica = 1; Limite = 9
+// Carga intrínsica = 3; Limite = 9
 @Entity
 @Table(name = "tb_user")
 public class User {
@@ -27,6 +29,15 @@ public class User {
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
     private OffsetDateTime createdAt;
+
+    @ManyToMany
+    @JoinTable(
+            name = "tb_user_group",
+            joinColumns = @JoinColumn(name = "user_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "group_id", nullable = false)
+    )
+    // Carga: +1 (Group)
+    private Set<Group> groups = new HashSet<>();
 
     @Deprecated
     public User() {
@@ -54,6 +65,10 @@ public class User {
         return createdAt;
     }
 
+    public Set<Group> getGroups() {
+        return groups;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -66,6 +81,19 @@ public class User {
 
     public boolean passwordEqualsTo(String currentPassword) {
         return this.password.equals(currentPassword);
+    }
+
+    public boolean hasThisGroup(Long groupId) {
+        // Carga: +1 (função como argumento)
+        return groups.stream().filter(group -> group.getId().equals(groupId)).findAny().isPresent();
+    }
+
+    public void associateGroup(Group group) {
+        groups.add(group);
+    }
+
+    public void dissociateGroup(Group group) {
+        groups.remove(group);
     }
 
 }

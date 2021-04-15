@@ -10,6 +10,7 @@ delete from tb_permission;
 delete from tb_group;
 delete from tb_group_permission;
 delete from tb_user;
+delete from tb_user_group;
 
 set foreign_key_checks = 1;
 
@@ -78,3 +79,8 @@ INSERT INTO tb_group_permission(group_id, permission_id) VALUES (2, 4);
 INSERT INTO tb_user(name, email, password, created_at) VALUES ('Armando', 'armando@gmail.com', '123', utc_timestamp);
 INSERT INTO tb_user(name, email, password, created_at) VALUES ('Ana', 'ana@gmail.com', '123', utc_timestamp);
 INSERT INTO tb_user(name, email, password, created_at) VALUES ('Manuela', 'manu@gmail.com', '123', utc_timestamp);
+
+INSERT INTO tb_user_group (user_id, group_id) VALUES (1, 1);
+INSERT INTO tb_user_group (user_id, group_id) VALUES (2, 2);
+INSERT INTO tb_user_group (user_id, group_id) VALUES (3, 1);
+INSERT INTO tb_user_group (user_id, group_id) VALUES (3, 2);
