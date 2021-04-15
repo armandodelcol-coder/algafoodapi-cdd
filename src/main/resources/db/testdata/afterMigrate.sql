@@ -9,6 +9,7 @@ delete from tb_restaurant_payment_method;
 delete from tb_permission;
 delete from tb_group;
 delete from tb_group_permission;
+delete from tb_user;
 
 set foreign_key_checks = 1;
 
@@ -19,6 +20,7 @@ alter table tb_city auto_increment = 1;
 alter table tb_payment_method auto_increment = 1;
 alter table tb_permission auto_increment = 1;
 alter table tb_group auto_increment = 1;
+alter table tb_user auto_increment = 1;
 
 INSERT INTO tb_kitchen (name) VALUES ('Tailandesa');
 INSERT INTO tb_kitchen (name) VALUES ('Indiana');
@@ -72,3 +74,7 @@ INSERT INTO tb_group(name) VALUES ('Grupo 2');
 INSERT INTO tb_group_permission(group_id, permission_id) VALUES (1, 1);
 INSERT INTO tb_group_permission(group_id, permission_id) VALUES (2, 2);
 INSERT INTO tb_group_permission(group_id, permission_id) VALUES (2, 4);
+
+INSERT INTO tb_user(name, email, password, created_at) VALUES ('Armando', 'armando@gmail.com', '123', utc_timestamp);
+INSERT INTO tb_user(name, email, password, created_at) VALUES ('Ana', 'ana@gmail.com', '123', utc_timestamp);
+INSERT INTO tb_user(name, email, password, created_at) VALUES ('Manuela', 'manu@gmail.com', '123', utc_timestamp);

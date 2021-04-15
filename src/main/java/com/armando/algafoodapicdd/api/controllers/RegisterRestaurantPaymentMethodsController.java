@@ -41,7 +41,7 @@ public class RegisterRestaurantPaymentMethodsController {
 
         restaurant.associatePaymentMethod(manager.find(PaymentMethod.class, request.getPaymentMethodId()));
         manager.persist(restaurant);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/dissociate")
@@ -60,7 +60,7 @@ public class RegisterRestaurantPaymentMethodsController {
 
         restaurant.dissociatePaymentMethod(manager.find(PaymentMethod.class, request.getPaymentMethodId()));
         manager.persist(restaurant);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     private Restaurant findRestaurantOrFail(Long id) {
