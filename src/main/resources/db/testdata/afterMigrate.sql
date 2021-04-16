@@ -11,6 +11,7 @@ delete from tb_group;
 delete from tb_group_permission;
 delete from tb_user;
 delete from tb_user_group;
+delete from tb_restaurant_responsible_user;
 
 set foreign_key_checks = 1;
 
@@ -84,3 +85,12 @@ INSERT INTO tb_user_group (user_id, group_id) VALUES (1, 1);
 INSERT INTO tb_user_group (user_id, group_id) VALUES (2, 2);
 INSERT INTO tb_user_group (user_id, group_id) VALUES (3, 1);
 INSERT INTO tb_user_group (user_id, group_id) VALUES (3, 2);
+
+INSERT INTO tb_restaurant_responsible_user (user_id, restaurant_id) VALUES (1, 1);
+INSERT INTO tb_restaurant_responsible_user (user_id, restaurant_id) VALUES (1, 2);
+INSERT INTO tb_restaurant_responsible_user (user_id, restaurant_id) VALUES (1, 3);
+INSERT INTO tb_restaurant_responsible_user (user_id, restaurant_id) VALUES (2, 4);
+INSERT INTO tb_restaurant_responsible_user (user_id, restaurant_id) VALUES (2, 5);
+INSERT INTO tb_restaurant_responsible_user (user_id, restaurant_id) VALUES (2, 6);
+INSERT INTO tb_restaurant_responsible_user (user_id, restaurant_id) VALUES (3, 7);
+INSERT INTO tb_restaurant_responsible_user (user_id, restaurant_id) VALUES (3, 8);

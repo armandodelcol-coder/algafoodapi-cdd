@@ -9,10 +9,9 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
-// Carga intrínsica = 5; Limite = 9
+// Carga intrínsica = 6; Limite = 9
 @Entity
 @Table(name = "tb_restaurant")
 public class Restaurant {
@@ -54,6 +53,16 @@ public class Restaurant {
             inverseJoinColumns = @JoinColumn(name = "payment_method_id"))
     // Carga: +1 (PaymentMethod)
     private Set<PaymentMethod> paymentMethods = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "tb_restaurant_responsible_user",
+            joinColumns = @JoinColumn(name = "restaurant_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "user_id", nullable = false)
+    )
+    // Carga: +1 (User)
+    private Set<User> responsible = new HashSet<>();
+
 
     @Deprecated
     public Restaurant() {
@@ -106,6 +115,10 @@ public class Restaurant {
         return paymentMethods;
     }
 
+    public Set<User> getResponsible() {
+        return responsible;
+    }
+
     // Carga: +1 (RestaurantRequest)
     public void setPropertiesToUpdate(RestaurantRequest restaurantRequest, EntityManager manager) {
         Assert.state(restaurantRequest != null, "Não é permitido informar um objeto restaurantRequest nulo para atualizar os dados de restaurante.");
@@ -138,6 +151,18 @@ public class Restaurant {
 
     public void dissociatePaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethods.remove(paymentMethod);
+    }
+
+    public boolean hasThisResponsible(Long userId) {
+        return responsible.stream().filter(user -> user.getId().equals(userId)).findAny().isPresent();
+    }
+
+    public void associateResponsible(User user) {
+        responsible.add(user);
+    }
+
+    public void dissociateResponsible(User user) {
+        responsible.remove(user);
     }
 
 }
