@@ -11,7 +11,7 @@ import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-// Carga intrínsica = 7; Limite = 9
+// Carga intrínsica = 8; Limite = 9
 @Entity
 @Table(name = "tb_restaurant")
 public class Restaurant {
@@ -63,6 +63,9 @@ public class Restaurant {
     // Carga: +1 (User)
     private Set<User> responsible = new HashSet<>();
 
+    @OneToMany(mappedBy = "restaurant")
+    // Carga: +1 (Product)
+    private Set<Product> products = new HashSet<>();
 
     @Deprecated
     public Restaurant() {
@@ -117,6 +120,10 @@ public class Restaurant {
 
     public Set<User> getResponsible() {
         return responsible;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
     }
 
     // Carga: +1 (RestaurantRequest)

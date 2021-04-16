@@ -12,6 +12,7 @@ delete from tb_group_permission;
 delete from tb_user;
 delete from tb_user_group;
 delete from tb_restaurant_responsible_user;
+delete from tb_product;
 
 set foreign_key_checks = 1;
 
@@ -23,6 +24,7 @@ alter table tb_payment_method auto_increment = 1;
 alter table tb_permission auto_increment = 1;
 alter table tb_group auto_increment = 1;
 alter table tb_user auto_increment = 1;
+alter table tb_product auto_increment = 1;
 
 INSERT INTO tb_kitchen (name) VALUES ('Tailandesa');
 INSERT INTO tb_kitchen (name) VALUES ('Indiana');
@@ -94,3 +96,11 @@ INSERT INTO tb_restaurant_responsible_user (user_id, restaurant_id) VALUES (2, 5
 INSERT INTO tb_restaurant_responsible_user (user_id, restaurant_id) VALUES (2, 6);
 INSERT INTO tb_restaurant_responsible_user (user_id, restaurant_id) VALUES (3, 7);
 INSERT INTO tb_restaurant_responsible_user (user_id, restaurant_id) VALUES (3, 8);
+
+INSERT INTO tb_product (name, description, price, restaurant_id) VALUES ('X-Burguer', 'Pão, carne e queijo', 10, 4);
+INSERT INTO tb_product (name, description, price, restaurant_id) VALUES ('X-Salada', 'Pão, carne , queijo e salada', 11.90, 4);
+INSERT INTO tb_product (name, description, price, restaurant_id) VALUES ('X-Frango', 'Pão, filé de frango e queijo', 10, 4);
+INSERT INTO tb_product (name, description, price, restaurant_id) VALUES ('Feijoada individual', 'Feijoada, acompanha arroz, farofa, banana empanada e tiras de bacon', 17, 5);
+INSERT INTO tb_product (name, description, price, restaurant_id) VALUES ('Feijoada para 2', 'Feijoada, acompanha arroz, farofa, banana empanada e tiras de bacon', 30, 5);
+INSERT INTO tb_product (name, description, price, restaurant_id) VALUES ('Combo TexMex para 3', 'tacos, burritos, quesadilla e mini burguers, acompanha molhos americanos e mexicanos', 60, 8);
+INSERT INTO tb_product (name, description, price, restaurant_id) VALUES ('quesadilla', '', 15, 8);
