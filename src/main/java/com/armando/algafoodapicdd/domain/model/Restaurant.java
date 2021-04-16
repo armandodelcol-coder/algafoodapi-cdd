@@ -165,4 +165,20 @@ public class Restaurant {
         responsible.remove(user);
     }
 
+    public void activate() {
+        active = true;
+    }
+
+    public void deactivate() {
+        active = false;
+    }
+
+    public void openUp() {
+        open = true;
+    }
+
+    public void close() {
+        open = false;
+    }
+
 }
