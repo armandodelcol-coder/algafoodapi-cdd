@@ -1,11 +1,10 @@
 package com.armando.algafoodapicdd.api.controllers;
 
-import com.armando.algafoodapicdd.api.exceptionhandler.CustomErrorResponseBody;
 import com.armando.algafoodapicdd.api.helpers.EntityNotFoundVerificationHelper;
+import com.armando.algafoodapicdd.api.helpers.ErrorResponseBodyHelper;
 import com.armando.algafoodapicdd.api.model.request.RestaurantResponsibleRequest;
 import com.armando.algafoodapicdd.domain.model.Restaurant;
 import com.armando.algafoodapicdd.domain.model.User;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
-import java.time.OffsetDateTime;
 
 // Carga intrínsica = 7; Limite = 7
 @RestController
 @RequestMapping("/restaurants/{restaurantId}/responsible")
-public class RestaurantResponsibleController {
+public class RegisterRestaurantResponsibleController {
 
     @PersistenceContext
     private EntityManager manager;
@@ -33,15 +31,10 @@ public class RestaurantResponsibleController {
         // Carga: +1 (Restaurant)
         Restaurant restaurant = findUserOrFail(restaurantId);
         // Carga: +1 (branch if);
-        if (restaurant.hasThisResponsible(request.getUserId())) {
+        if (restaurant.hasThisResponsibleById(request.getUserId())) {
             return ResponseEntity.badRequest().body(
-                    // Carga: +1 (CustomErrorResponseBody);
-                    new CustomErrorResponseBody(
-                            HttpStatus.BAD_REQUEST.value(),
-                            HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                            "Esse usuário já é um responsável desse restaurante.",
-                            OffsetDateTime.now()
-                    )
+                    // Carga: +1 (ErrorResponseBodyHelper);
+                    ErrorResponseBodyHelper.badRequest("Esse usuário já é um responsável desse restaurante.")
             );
         }
 
@@ -60,7 +53,7 @@ public class RestaurantResponsibleController {
     ) {
         Restaurant restaurant = findUserOrFail(restaurantId);
         // Carga: +1 (branch if);
-        if (restaurant.hasThisResponsible(request.getUserId())) {
+        if (restaurant.hasThisResponsibleById(request.getUserId())) {
             User user = manager.find(User.class, request.getUserId());
             restaurant.dissociateResponsible(user);
             manager.persist(restaurant);
@@ -68,12 +61,7 @@ public class RestaurantResponsibleController {
         }
 
         return ResponseEntity.badRequest().body(
-                new CustomErrorResponseBody(
-                        HttpStatus.BAD_REQUEST.value(),
-                        HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                        "Esse usuário não é um responsável desse restaurante.",
-                        OffsetDateTime.now()
-                )
+                ErrorResponseBodyHelper.badRequest("Esse usuário não é um responsável desse restaurante.")
         );
     }
 

@@ -1,6 +1,7 @@
 package com.armando.algafoodapicdd.api.controllers;
 
 import com.armando.algafoodapicdd.api.exceptionhandler.CustomErrorResponseBody;
+import com.armando.algafoodapicdd.api.helpers.ErrorResponseBodyHelper;
 import com.armando.algafoodapicdd.api.model.request.CityRequest;
 import com.armando.algafoodapicdd.api.model.response.CityResponse;
 import com.armando.algafoodapicdd.api.helpers.EntityNotFoundVerificationHelper;
@@ -69,13 +70,8 @@ public class RegisterCitiesController {
         // Carga: +1 (branch if)
         if (city.hasAnyRestaurantWithThisCityRegistered(manager)) {
             return ResponseEntity.badRequest().body(
-                    // Carga: +1 (CustomErrorResponseBody)
-                    new CustomErrorResponseBody(
-                            HttpStatus.BAD_REQUEST.value(),
-                            HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                            "Existem endereços cadastrados com essa cidade.",
-                            OffsetDateTime.now()
-                    )
+                    // Carga: +1 (ErrorResponseBodyHelper)
+                    ErrorResponseBodyHelper.badRequest("Existem endereços cadastrados com essa cidade.")
             );
         }
 

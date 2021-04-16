@@ -3,7 +3,6 @@ package com.armando.algafoodapicdd.api.controllers;
 import com.armando.algafoodapicdd.api.helpers.EntityNotFoundVerificationHelper;
 import com.armando.algafoodapicdd.api.helpers.ErrorResponseBodyHelper;
 import com.armando.algafoodapicdd.api.model.request.GroupPermissionAssociationRequest;
-import com.armando.algafoodapicdd.api.utils.GroupPermissionUtil;
 import com.armando.algafoodapicdd.domain.model.Group;
 import com.armando.algafoodapicdd.domain.model.Permission;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
 
-// Carga intrínseca = 7; limite = 7
+// Carga intrínseca = 6; limite = 7
 @RestController
 @RequestMapping("/groups/{groupId}/permissions")
 public class RegisterGroupPermissionsController {
@@ -31,8 +30,8 @@ public class RegisterGroupPermissionsController {
     ) {
         // Carga: +1 (Group)
         Group group = findOrFail(groupId);
-        // Carga: +1 (GroupPermissionUtil); +1 (branch if)
-        if (GroupPermissionUtil.exists(group, request.getPermissionId())) {
+        // Carga: +1 (branch if)
+        if (group.hasPermissionById(request.getPermissionId())) {
             return ResponseEntity.badRequest()
                     // Carga: +1 (ErrorResponseBodyHelper)
                     .body(ErrorResponseBodyHelper.badRequest("Já existe essa permissão associada a esse grupo."));
@@ -51,7 +50,7 @@ public class RegisterGroupPermissionsController {
     ) {
         Group group = findOrFail(groupId);
         // Carga: +1 (branch if)
-        if (!GroupPermissionUtil.exists(group, request.getPermissionId())) {
+        if (!group.hasPermissionById(request.getPermissionId())) {
             return ResponseEntity.badRequest()
                     .body(ErrorResponseBodyHelper.badRequest("Não existe essa permissão associada a esse grupo."));
         }

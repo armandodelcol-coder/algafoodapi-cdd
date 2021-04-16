@@ -1,9 +1,9 @@
 package com.armando.algafoodapicdd.api.controllers;
 
-import com.armando.algafoodapicdd.api.exceptionhandler.CustomErrorResponseBody;
+import com.armando.algafoodapicdd.api.helpers.EntityNotFoundVerificationHelper;
+import com.armando.algafoodapicdd.api.helpers.ErrorResponseBodyHelper;
 import com.armando.algafoodapicdd.api.model.request.StateRequest;
 import com.armando.algafoodapicdd.api.model.response.StateResponse;
-import com.armando.algafoodapicdd.api.helpers.EntityNotFoundVerificationHelper;
 import com.armando.algafoodapicdd.domain.model.State;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,13 +68,8 @@ public class StatesController {
         // Carga: +1 (branch if)
         if (state.hasAnyCity()) {
             return ResponseEntity.badRequest().body(
-                    // Carga: +1 (CustomErrorResponseBody)
-                    new CustomErrorResponseBody(
-                            HttpStatus.BAD_REQUEST.value(),
-                            HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                            "Existem cidades cadastradas com esse estado.",
-                            OffsetDateTime.now()
-                    )
+                    // Carga: +1 (ErrorResponseBodyHelper)
+                    ErrorResponseBodyHelper.badRequest("Existem cidades cadastradas com esse estado.")
             );
         }
 

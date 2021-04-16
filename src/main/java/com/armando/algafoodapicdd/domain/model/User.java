@@ -83,7 +83,7 @@ public class User {
         return this.password.equals(currentPassword);
     }
 
-    public boolean hasThisGroup(Long groupId) {
+    public boolean hasThisGroupById(Long groupId) {
         // Carga: +1 (função como argumento)
         return groups.stream().filter(group -> group.getId().equals(groupId)).findAny().isPresent();
     }

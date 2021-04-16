@@ -3,7 +3,6 @@ package com.armando.algafoodapicdd.api.controllers;
 import com.armando.algafoodapicdd.api.helpers.EntityNotFoundVerificationHelper;
 import com.armando.algafoodapicdd.api.helpers.ErrorResponseBodyHelper;
 import com.armando.algafoodapicdd.api.model.request.PaymentMethodAssociationRequest;
-import com.armando.algafoodapicdd.api.utils.RestaurantPaymentMethodUtil;
 import com.armando.algafoodapicdd.domain.model.PaymentMethod;
 import com.armando.algafoodapicdd.domain.model.Restaurant;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
 
-// Carga intrínsica = 7; Limite = 7
+// Carga intrínsica = 6; Limite = 7
 @RestController
 @RequestMapping("/restaurants/{restaurantId}/paymentmethods")
 public class RegisterRestaurantPaymentMethodsController {
@@ -31,8 +30,8 @@ public class RegisterRestaurantPaymentMethodsController {
     ) {
         // Carga: +1 (Restaurant)
         Restaurant restaurant = findRestaurantOrFail(restaurantId);
-        // Carga: +1 (RestaurantPaymentMethodHelper); +1 (branch if)
-        if (RestaurantPaymentMethodUtil.existsInRestaurant(restaurant, request.getPaymentMethodId())) {
+        // Carga: +1 (branch if)
+        if (restaurant.hasPaymentMethodById(request.getPaymentMethodId())) {
             return ResponseEntity.badRequest().body(
                     // Carga: +1 (ErrorResponseBodyHelper)
                     ErrorResponseBodyHelper.badRequest("Já existe essa forma de pagamento associada nesse restaurante.")
@@ -52,7 +51,7 @@ public class RegisterRestaurantPaymentMethodsController {
     ) {
         Restaurant restaurant = findRestaurantOrFail(restaurantId);
         // Carga: +1 (branch if)
-        if (!RestaurantPaymentMethodUtil.existsInRestaurant(restaurant, request.getPaymentMethodId())) {
+        if (!restaurant.hasPaymentMethodById(request.getPaymentMethodId())) {
             return ResponseEntity.badRequest().body(
                     ErrorResponseBodyHelper.badRequest("A forma de pagamento informada não está associada nesse restaurante.")
             );

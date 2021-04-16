@@ -11,7 +11,7 @@ import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-// Carga intrínsica = 6; Limite = 9
+// Carga intrínsica = 7; Limite = 9
 @Entity
 @Table(name = "tb_restaurant")
 public class Restaurant {
@@ -153,7 +153,7 @@ public class Restaurant {
         this.paymentMethods.remove(paymentMethod);
     }
 
-    public boolean hasThisResponsible(Long userId) {
+    public boolean hasThisResponsibleById(Long userId) {
         return responsible.stream().filter(user -> user.getId().equals(userId)).findAny().isPresent();
     }
 
@@ -179,6 +179,11 @@ public class Restaurant {
 
     public void close() {
         open = false;
+    }
+
+    public boolean hasPaymentMethodById(Long paymentMethodId) {
+        // Carga: +1 (função como argumento)
+        return paymentMethods.stream().filter(paymentMethod -> paymentMethod.getId().equals(paymentMethodId)).findAny().isPresent();
     }
 
 }

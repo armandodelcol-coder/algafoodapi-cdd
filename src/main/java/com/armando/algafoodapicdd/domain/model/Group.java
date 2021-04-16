@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-// Carga intrínsica = 1; Limite = 9
+// Carga intrínsica = 2; Limite = 9
 @Entity
 @Table(name = "tb_group")
 public class Group {
@@ -51,6 +51,14 @@ public class Group {
 
     public void dissociatePermission(Permission permission) {
         this.permissions.remove(permission);
+    }
+
+    public boolean hasPermissionById(Long permissionId) {
+        return permissions.stream()
+                // Carga: +1 (função como argumento no filter)
+                .filter(permission -> permission.getId().equals(permissionId))
+                .findAny()
+                .isPresent();
     }
 
 }

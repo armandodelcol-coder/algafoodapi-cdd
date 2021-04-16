@@ -1,9 +1,9 @@
 package com.armando.algafoodapicdd.api.controllers;
 
+import com.armando.algafoodapicdd.api.helpers.EntityNotFoundVerificationHelper;
 import com.armando.algafoodapicdd.api.model.request.RestaurantRequest;
 import com.armando.algafoodapicdd.api.model.response.RestaurantResponse;
 import com.armando.algafoodapicdd.api.model.response.RestaurantSummaryResponse;
-import com.armando.algafoodapicdd.api.helpers.EntityNotFoundVerificationHelper;
 import com.armando.algafoodapicdd.domain.model.Restaurant;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,9 +49,7 @@ public class RestaurantsController {
     @GetMapping("/{restaurantId}")
     @ResponseStatus(HttpStatus.OK)
     public RestaurantResponse findById(@PathVariable Long restaurantId) {
-        Restaurant restaurant = manager.find(Restaurant.class, restaurantId);
-        // Carga: +1 (EntityNotFoundVerification)
-        EntityNotFoundVerificationHelper.dispatchIfEntityIsNull(restaurant, "Restaurante não encontrado.");
+        Restaurant restaurant = findOrFail(restaurantId);
         return new RestaurantResponse(restaurant);
     }
 
@@ -62,8 +60,7 @@ public class RestaurantsController {
             @PathVariable Long restaurantId,
             @RequestBody @Valid RestaurantRequest restaurantRequest
     ) {
-        Restaurant restaurant = manager.find(Restaurant.class, restaurantId);
-        EntityNotFoundVerificationHelper.dispatchIfEntityIsNull(restaurant, "Restaurante não encontrado.");
+        Restaurant restaurant = findOrFail(restaurantId);
         restaurant.setPropertiesToUpdate(restaurantRequest, manager);
         manager.persist(restaurant);
         return new RestaurantResponse(restaurant);
@@ -73,9 +70,15 @@ public class RestaurantsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
     public void delete(@PathVariable Long restaurantId) {
-        Restaurant restaurant = manager.find(Restaurant.class, restaurantId);
-        EntityNotFoundVerificationHelper.dispatchIfEntityIsNull(restaurant, "Restaurante não encontrado.");
+        Restaurant restaurant = findOrFail(restaurantId);
         manager.remove(restaurant);
+    }
+
+    private Restaurant findOrFail(Long id) {
+        Restaurant restaurant = manager.find(Restaurant.class, id);
+        // Carga: +1 (EntityNotFoundVerification)
+        EntityNotFoundVerificationHelper.dispatchIfEntityIsNull(restaurant, "Restaurante não encontrado.");
+        return restaurant;
     }
 
 }

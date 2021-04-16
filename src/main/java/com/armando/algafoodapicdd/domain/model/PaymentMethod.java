@@ -4,8 +4,8 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 // Carga intrínsica = 1; Limite = 9
 @Entity
@@ -19,12 +19,9 @@ public class PaymentMethod {
     @Column(nullable = false)
     private String description;
 
-    @ManyToMany
-    @JoinTable(name = "tb_restaurant_payment_method",
-            joinColumns = @JoinColumn(name = "restaurant_id"),
-            inverseJoinColumns = @JoinColumn(name = "payment_method_id"))
-    // Carga: +1 (PaymentMethod)
-    private List<Restaurant> restaurants = new ArrayList<>();
+    @ManyToMany(mappedBy = "paymentMethods")
+    // Carga: +1 (Restaurant)
+    private Set<Restaurant> restaurants = new HashSet<>();
 
     @Deprecated
     public PaymentMethod() {
