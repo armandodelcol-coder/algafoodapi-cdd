@@ -25,7 +25,7 @@ public class ProductsBelongsToRestaurantValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        if (errors.hasErrors()) return;
+        // if (errors.hasErrors()) return;
 
         List<Long> productIdsInvalids = new ArrayList<>();
         OrderRequest request = (OrderRequest) target;

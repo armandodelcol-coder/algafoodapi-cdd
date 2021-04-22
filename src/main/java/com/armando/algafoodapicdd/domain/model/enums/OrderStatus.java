@@ -22,8 +22,8 @@ public enum OrderStatus {
         return this.description;
     }
 
-    public boolean cantTrackerFor(OrderStatus newStatus) {
-        return !newStatus.olderStatus.contains(this);
+    public boolean canTrackerFor(OrderStatus newStatus) {
+        return newStatus.olderStatus.contains(this);
     }
 
 }

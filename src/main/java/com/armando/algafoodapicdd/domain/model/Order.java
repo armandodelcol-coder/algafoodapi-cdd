@@ -144,6 +144,21 @@ public class Order {
         this.total = this.subtotal.add(this.deliveryTax);
     }
 
+    public void confirm() {
+        this.status = OrderStatus.CONFIRMADO;
+        this.confirmedAt = OffsetDateTime.now();
+    }
+
+    public void delivery() {
+        this.status = OrderStatus.ENTREGUE;
+        this.deliveryAt = OffsetDateTime.now();
+    }
+
+    public void cancel() {
+        this.status = OrderStatus.CANCELADO;
+        this.canceledAt = OffsetDateTime.now();
+    }
+
     @PrePersist
     private void prePersist() {
         generateCode();

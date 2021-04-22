@@ -23,7 +23,7 @@ public class CityOfRestaurantValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        if (errors.hasErrors()) return;
+        // if (errors.hasErrors()) return;
 
         OrderRequest request = (OrderRequest) target;
         Restaurant restaurant = manager.find(Restaurant.class, request.getRestaurantId());
