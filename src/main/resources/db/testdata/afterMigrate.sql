@@ -13,6 +13,8 @@ delete from tb_user;
 delete from tb_user_group;
 delete from tb_restaurant_responsible_user;
 delete from tb_product;
+delete from tb_order;
+delete from tb_order_item;
 
 set foreign_key_checks = 1;
 
@@ -25,6 +27,8 @@ alter table tb_permission auto_increment = 1;
 alter table tb_group auto_increment = 1;
 alter table tb_user auto_increment = 1;
 alter table tb_product auto_increment = 1;
+alter table tb_order auto_increment = 1;
+alter table tb_order_item auto_increment = 1;
 
 INSERT INTO tb_kitchen (name) VALUES ('Tailandesa');
 INSERT INTO tb_kitchen (name) VALUES ('Indiana');

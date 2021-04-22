@@ -2,6 +2,7 @@ package com.armando.algafoodapicdd.domain.model;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 // Carga intrínsica = 1; Limite = 9

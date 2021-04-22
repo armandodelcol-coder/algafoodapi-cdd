@@ -193,4 +193,8 @@ public class Restaurant {
         return paymentMethods.stream().filter(paymentMethod -> paymentMethod.getId().equals(paymentMethodId)).findAny().isPresent();
     }
 
+    public boolean acceptPaymentMethod(PaymentMethod paymentMethod) {
+        return this.paymentMethods.contains(paymentMethod);
+    }
+
 }
