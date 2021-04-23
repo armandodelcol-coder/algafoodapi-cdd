@@ -1,4 +1,4 @@
-package com.armando.algafoodapicdd.api.validator;
+package com.armando.algafoodapicdd.api.core.validator;
 
 import com.armando.algafoodapicdd.api.model.request.OrderRequest;
 import com.armando.algafoodapicdd.domain.model.Product;

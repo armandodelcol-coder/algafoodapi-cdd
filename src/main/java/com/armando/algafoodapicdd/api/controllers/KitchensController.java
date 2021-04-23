@@ -5,6 +5,10 @@ import com.armando.algafoodapicdd.api.helpers.ErrorResponseBodyHelper;
 import com.armando.algafoodapicdd.api.model.request.KitchenRequest;
 import com.armando.algafoodapicdd.api.model.response.KitchenResponse;
 import com.armando.algafoodapicdd.domain.model.Kitchen;
+import com.armando.algafoodapicdd.domain.repository.KitchenRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,16 +17,18 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
-// Carga intrínsica = 7; Limite = 7
+// Carga intrínsica = 8; Limite = 7
 @RestController
 @RequestMapping(value = "/kitchens")
 public class KitchensController {
 
     @PersistenceContext
     private EntityManager manager;
+
+    @Autowired
+    // +1
+    private KitchenRepository kitchenRepository;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -37,12 +43,9 @@ public class KitchensController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<KitchenResponse> list() {
-        return manager.createQuery("SELECT kitchen FROM Kitchen kitchen", Kitchen.class)
-                .getResultList().stream()
-                // Carga: +1 (função como argumento no map)
-                .map(kitchen -> new KitchenResponse(kitchen))
-                .collect(Collectors.toList());
+    public Page<KitchenResponse> list(Pageable pageable) {
+        // +1
+        return kitchenRepository.findAll(pageable).map(kitchen -> new KitchenResponse(kitchen));
     }
 
     @GetMapping("/{kitchenId}")

@@ -1,7 +1,7 @@
 package com.armando.algafoodapicdd.api.model.request;
 
-import com.armando.algafoodapicdd.api.validator.ExistsId;
-import com.armando.algafoodapicdd.api.validator.UniqueValue;
+import com.armando.algafoodapicdd.api.core.validator.ExistsId;
+import com.armando.algafoodapicdd.api.core.validator.UniqueValue;
 import com.armando.algafoodapicdd.domain.model.Address;
 import com.armando.algafoodapicdd.domain.model.City;
 import com.armando.algafoodapicdd.domain.model.Kitchen;

@@ -1,11 +1,10 @@
 package com.armando.algafoodapicdd.api.controllers;
 
-import com.armando.algafoodapicdd.api.exceptionhandler.CustomErrorResponseBody;
 import com.armando.algafoodapicdd.api.helpers.ErrorResponseBodyHelper;
 import com.armando.algafoodapicdd.api.model.request.CityRequest;
 import com.armando.algafoodapicdd.api.model.response.CityResponse;
 import com.armando.algafoodapicdd.api.helpers.EntityNotFoundVerificationHelper;
-import com.armando.algafoodapicdd.api.validator.CityAlreadyExistsInStateValidator;
+import com.armando.algafoodapicdd.api.core.validator.CityAlreadyExistsInStateValidator;
 import com.armando.algafoodapicdd.domain.model.City;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
-import java.time.OffsetDateTime;
 
 // Carga intrínsica = 7; Limite = 7
 @RestController

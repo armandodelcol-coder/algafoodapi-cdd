@@ -1,6 +1,6 @@
 package com.armando.algafoodapicdd.api.model.request;
 
-import com.armando.algafoodapicdd.api.validator.UniqueValue;
+import com.armando.algafoodapicdd.api.core.validator.UniqueValue;
 import com.armando.algafoodapicdd.domain.model.State;
 
 import javax.validation.constraints.NotBlank;

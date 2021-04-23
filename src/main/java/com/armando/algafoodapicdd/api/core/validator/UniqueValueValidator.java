@@ -1,4 +1,4 @@
-package com.armando.algafoodapicdd.api.validator;
+package com.armando.algafoodapicdd.api.core.validator;
 
 import org.springframework.util.Assert;
 

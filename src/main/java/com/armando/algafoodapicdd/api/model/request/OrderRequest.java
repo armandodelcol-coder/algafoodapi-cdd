@@ -1,6 +1,6 @@
 package com.armando.algafoodapicdd.api.model.request;
 
-import com.armando.algafoodapicdd.api.validator.ExistsId;
+import com.armando.algafoodapicdd.api.core.validator.ExistsId;
 import com.armando.algafoodapicdd.domain.model.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;

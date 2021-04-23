@@ -1,7 +1,7 @@
-package com.armando.algafoodapicdd.api.validator;
+package com.armando.algafoodapicdd.api.core.validator;
 
 import com.armando.algafoodapicdd.api.model.request.OrderRequest;
-import com.armando.algafoodapicdd.domain.model.City;
+import com.armando.algafoodapicdd.domain.model.PaymentMethod;
 import com.armando.algafoodapicdd.domain.model.Restaurant;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -11,14 +11,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Component
-public class CityOfRestaurantValidator implements Validator {
+public class PaymentMethodBelongsToRestaurantValidator implements Validator {
 
     @PersistenceContext
     private EntityManager manager;
 
     @Override
-    public boolean supports(Class<?> clazz) {
-        return OrderRequest.class.isAssignableFrom(clazz);
+    public boolean supports(Class<?> aClass) {
+        return OrderRequest.class.isAssignableFrom(aClass);
     }
 
     @Override
@@ -27,10 +27,10 @@ public class CityOfRestaurantValidator implements Validator {
 
         OrderRequest request = (OrderRequest) target;
         Restaurant restaurant = manager.find(Restaurant.class, request.getRestaurantId());
-        City city = manager.find(City.class, request.getDeliveryAddress().getCityId());
-        if (restaurant.getAddress().getCity().equals(city)) return;
+        PaymentMethod paymentMethod = manager.find(PaymentMethod.class, request.getPaymentMethodId());
+        if (restaurant.acceptPaymentMethod(paymentMethod)) return;
 
-        errors.rejectValue("deliveryAddress.cityId", null, "Cidade informada não é a mesma do restaurante informado.");
+        errors.rejectValue("paymentMethodId", null, "O restaurante não aceita o método de pagamento informado.");
     }
 
 }

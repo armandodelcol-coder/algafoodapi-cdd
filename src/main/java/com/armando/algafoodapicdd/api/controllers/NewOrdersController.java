@@ -2,9 +2,9 @@ package com.armando.algafoodapicdd.api.controllers;
 
 import com.armando.algafoodapicdd.api.model.request.OrderRequest;
 import com.armando.algafoodapicdd.api.model.response.OrderResponse;
-import com.armando.algafoodapicdd.api.validator.CityOfRestaurantValidator;
-import com.armando.algafoodapicdd.api.validator.PaymentMethodBelongsToRestaurantValidator;
-import com.armando.algafoodapicdd.api.validator.ProductsBelongsToRestaurantValidator;
+import com.armando.algafoodapicdd.api.core.validator.CityOfRestaurantValidator;
+import com.armando.algafoodapicdd.api.core.validator.PaymentMethodBelongsToRestaurantValidator;
+import com.armando.algafoodapicdd.api.core.validator.ProductsBelongsToRestaurantValidator;
 import com.armando.algafoodapicdd.domain.model.Order;
 import com.armando.algafoodapicdd.domain.model.User;
 import org.springframework.beans.factory.annotation.Autowired;

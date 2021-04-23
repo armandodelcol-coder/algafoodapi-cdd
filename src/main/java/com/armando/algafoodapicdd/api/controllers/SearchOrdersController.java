@@ -7,12 +7,12 @@ import com.armando.algafoodapicdd.domain.repository.OrderRepository;
 import com.armando.algafoodapicdd.domain.repository.filters.OrderFilter;
 import com.armando.algafoodapicdd.infrastucture.specs.OrderSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/orders")
@@ -23,8 +23,9 @@ public class SearchOrdersController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<OrderSummaryResponse> list(OrderFilter filter) {
-        return orderRepository.findAll(OrderSpecs.usingFilter(filter)).stream().map(order -> new OrderSummaryResponse(order)).collect(Collectors.toList());
+    public Page<OrderSummaryResponse> list(OrderFilter filter, Pageable pageable) {
+        return orderRepository.findAll(OrderSpecs.usingFilter(filter), pageable)
+                .map(order -> new OrderSummaryResponse(order));
     }
 
     @GetMapping("/{code}")

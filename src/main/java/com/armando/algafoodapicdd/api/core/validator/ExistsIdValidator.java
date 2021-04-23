@@ -1,4 +1,4 @@
-package com.armando.algafoodapicdd.api.validator;
+package com.armando.algafoodapicdd.api.core.validator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

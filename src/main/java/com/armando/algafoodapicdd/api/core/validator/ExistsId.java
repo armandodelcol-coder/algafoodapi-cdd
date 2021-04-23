@@ -1,23 +1,21 @@
-package com.armando.algafoodapicdd.api.validator;
+package com.armando.algafoodapicdd.api.core.validator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = {UniqueValueValidator.class})
+@Constraint(validatedBy = {ExistsIdValidator.class})
 @Target({ElementType.FIELD, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UniqueValue {
+public @interface ExistsId {
 
-    String message() default "UniqueValue";
+    String message() default "ExistsId";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 
     Class<?> domainClass();
-
-    String fieldName();
 
 }
