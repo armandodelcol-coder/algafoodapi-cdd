@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -97,25 +98,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return super.handleHttpMessageNotReadable(ex, headers, status, request);
     }
 
+    // Validação para valores dos campos de "query params".
+    @Override
+    protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return genericHandleInvalidInputFields(ex, headers, status, request, ex.getBindingResult());
+    }
+
+    // Validação para valores dos campos de JSON de entrada de dados.
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        CustomErrorResponseBody body = new CustomErrorResponseBody(
-                status.value(),
-                status.getReasonPhrase(),
-                "Um ou mais campos de entrada estão inválidos, verifique o preenchimento e tente novamente.",
-                OffsetDateTime.now()
-        );
-
-        BindingResult bindingResult = ex.getBindingResult();
-        List<CustomErrorResponseBody.Detail> invalidFields = bindingResult.getFieldErrors().stream()
-                .map(fieldError -> {
-                    // Message Source serve para viabilizar que a mensagem dos campos possam ser tratadas no arquivo messages.properties
-                    String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
-                    return new CustomErrorResponseBody.Detail(fieldError.getField(), message);
-                }).collect(Collectors.toList());
-        body.setDetails(invalidFields);
-
-        return super.handleExceptionInternal(ex, body, headers, status, request);
+        return genericHandleInvalidInputFields(ex, headers, status, request, ex.getBindingResult());
     }
 
     @Override
@@ -136,6 +128,25 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return references.stream()
                 .map(ref -> ref.getFieldName())
                 .collect(Collectors.joining("."));
+    }
+
+    private ResponseEntity<Object> genericHandleInvalidInputFields(Exception ex, HttpHeaders headers, HttpStatus status, WebRequest request, BindingResult bindingResult) {
+        CustomErrorResponseBody body = new CustomErrorResponseBody(
+                status.value(),
+                status.getReasonPhrase(),
+                "Um ou mais campos de entrada estão inválidos, verifique o preenchimento e tente novamente.",
+                OffsetDateTime.now()
+        );
+
+        List<CustomErrorResponseBody.Detail> invalidFields = bindingResult.getFieldErrors().stream()
+                .map(fieldError -> {
+                    // Message Source serve para viabilizar que a mensagem dos campos possam ser tratadas no arquivo messages.properties
+                    String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+                    return new CustomErrorResponseBody.Detail(fieldError.getField(), message);
+                }).collect(Collectors.toList());
+        body.setDetails(invalidFields);
+
+        return super.handleExceptionInternal(ex, body, headers, status, request);
     }
 
 }
