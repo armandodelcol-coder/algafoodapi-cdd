@@ -5,7 +5,6 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.Objects;
 
 // Carga intrínsica = 3; Limite = 9
 @Entity
